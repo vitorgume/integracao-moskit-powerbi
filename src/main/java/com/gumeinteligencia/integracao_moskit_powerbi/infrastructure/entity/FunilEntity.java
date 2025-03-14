@@ -15,8 +15,7 @@ import java.util.UUID;
 public class FunilEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_funil")
-    private UUID id;
+    private Integer id;
     private String name;
 }

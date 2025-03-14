@@ -2,6 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.EmpresaEntity;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.EmpresaDto;
 
 public class EmpresaMapper {
 
@@ -23,5 +24,9 @@ public class EmpresaMapper {
                 .responsible(UsuarioMapper.paraEntity(domain.getResponsible()))
                 .createdBy(UsuarioMapper.paraEntity(domain.getCreatedBy()))
                 .build();
+    }
+
+    public static Empresa paraDomainDeDto(EmpresaDto dto) {
+        
     }
 }

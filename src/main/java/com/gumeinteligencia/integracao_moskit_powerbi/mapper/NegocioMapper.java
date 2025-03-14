@@ -2,6 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.NegocioEntity;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 
 public class NegocioMapper {
 
@@ -28,4 +29,12 @@ public class NegocioMapper {
                 .createdBy(UsuarioMapper.paraEntity(domain.getCreatedBy()))
                 .build();
     }
+
+//    public static Negocio paraDomainDeDto(NegocioDto dto) {
+//        return Negocio.builder()
+//                .name(dto.name())
+//                .price(dto.price())
+//                .stage(dto.stage())
+//                .status(dto)
+//    }
 }

@@ -15,9 +15,8 @@ import java.util.UUID;
 public class FaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_fase")
-    private UUID id;
+    private Integer id;
 
     private String name;
 

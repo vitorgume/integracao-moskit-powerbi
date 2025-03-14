@@ -17,17 +17,15 @@ import java.util.UUID;
 public class NegocioEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_negocio")
-    private UUID id;
+    private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
-    @Column(name = "created_by")
+    @JoinColumn(name = "id_usuario_created", nullable = false)
     private UsuarioEntity createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario_responsible", nullable = false)
     private UsuarioEntity responsible;
 
     private String name;

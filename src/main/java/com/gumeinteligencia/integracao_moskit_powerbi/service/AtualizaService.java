@@ -15,6 +15,20 @@ public class AtualizaService {
     private final AtualizaEmpresaService empresaService;
 
     public String gatewayAtualizacoes() {
+        int quantidadeExecucoesUsuario = usuarioService.atualiza();
+////        String statusNegocio = negocioService.atualiza();
+        int quantidadeExecucoesFunil = funilService.atualiza();
+        int quantidadeExecucoesFase = faseService.atualiza();
+////        String statusEmpresa = empresaService.atualiza();
+//
+//        if(statusEmpresa.equals("ERRO") || statusNegocio.equals("ERRO")
+//                || statusUsuario.equals("ERRO") || statusFunil.equals("ERRO")
+//                || statusFase.equals("ERRO")) {
+//            return "Operação não ocorreu com sucesso";
+//        }
 
+        int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase;
+
+        return "Operação concluida com sucesso, quantidade de operações: " + total;
     }
 }

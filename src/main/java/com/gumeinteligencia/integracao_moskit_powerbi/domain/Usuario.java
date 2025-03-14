@@ -1,10 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,9 +9,16 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@ToString
+@EqualsAndHashCode
 public class Usuario {
-    private UUID id;
+
+    private Integer id;
+
+    @EqualsAndHashCode.Include
     private String name;
+
     private String userName;
+
     private Boolean active;
 }

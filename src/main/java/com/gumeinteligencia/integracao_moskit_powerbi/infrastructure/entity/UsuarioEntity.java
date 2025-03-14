@@ -16,8 +16,8 @@ import java.util.UUID;
 public class UsuarioEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(name = "id_usuario")
+    private Integer id;
     private String name;
     private String userName;
     private Boolean active;

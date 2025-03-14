@@ -1,9 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -11,8 +8,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Fase {
-    private UUID id;
+    private Integer id;
     private String name;
     private Funil pipeline;
 }
