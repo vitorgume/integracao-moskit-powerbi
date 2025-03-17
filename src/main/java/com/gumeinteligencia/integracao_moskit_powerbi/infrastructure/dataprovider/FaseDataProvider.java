@@ -6,8 +6,8 @@ import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repository.
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class FaseDataProvider {
     private final FaseRepository repository;
 
 
-    public List<FaseEntity> listarUsuario() {
+    public List<FaseEntity> listarFases() {
         List<FaseEntity> fasesEntities;
 
         try {
@@ -38,5 +38,17 @@ public class FaseDataProvider {
         }
 
         return faseSalva;
+    }
+
+    public Optional<FaseEntity> consultarPorId(Integer id) {
+        Optional<FaseEntity> faseEntity;
+
+        try {
+            faseEntity = repository.findById(id);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+
+        return faseEntity;
     }
 }

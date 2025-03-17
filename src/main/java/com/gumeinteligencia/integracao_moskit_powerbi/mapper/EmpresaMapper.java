@@ -27,6 +27,12 @@ public class EmpresaMapper {
     }
 
     public static Empresa paraDomainDeDto(EmpresaDto dto) {
-        
+        return Empresa.builder()
+                .id(dto.id())
+                .cnpj(dto.cnpj())
+                .name(dto.name())
+                .responsible(UsuarioMapper.paraDomainDeDto(dto.responsible()))
+                .createdBy(UsuarioMapper.paraDomainDeDto(dto.createdBy()))
+                .build();
     }
 }

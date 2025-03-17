@@ -3,17 +3,16 @@ package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especific
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.FaseDataProvider;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.FunilDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FaseMapper;
-import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.FunilService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FunilDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -56,7 +55,7 @@ public class AtualizaFaseService implements Atualiza<FaseDto>{
             throw new RuntimeException("Nenhuma fase encontrado");
         }
 
-        List<Fase> fasesAntigas = dataProvider.listarUsuario().stream().map(FaseMapper::paraDomain).toList();
+        List<Fase> fasesAntigas = dataProvider.listarFases().stream().map(FaseMapper::paraDomain).toList();
 
         List<Fase> fasesCadastrar = faseNovas.stream()
                 .filter(faseNovo ->
@@ -81,14 +80,30 @@ public class AtualizaFaseService implements Atualiza<FaseDto>{
     @Override
     public List<FaseDto> consultaApi() {
         String uri = baseUrl + "/stages";
+        String nextPageToken = null;
+        int quantity = 50;
+        List<FaseDto> todasFases = new ArrayList<>();
 
-        List<FaseDto> fases = webClient.get()
-                .uri(uri)
-                .header("apikey", apiKey)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<FaseDto>>() {})
-                .block();
+        do {
+            String uriPaginada = nextPageToken == null
+                    ? uri + "?quantity=" + quantity
+                    : uri + "?quantity=" + quantity + "&nextPageToken=" + nextPageToken;
 
-        return fases;
+            var response = webClient.get()
+                    .uri(uriPaginada)
+                    .header("apikey", apiKey)
+                    .retrieve()
+                    .toEntityList(FaseDto.class)
+                    .block();
+
+            if (response != null && response.getBody() != null) {
+                todasFases.addAll(response.getBody());
+            }
+
+            nextPageToken = response != null ? response.getHeaders().getFirst("X-Moskit-Listing-Next-Page-Token") : null;
+
+        } while (nextPageToken != null && !nextPageToken.isEmpty());
+
+        return todasFases;
     }
 }

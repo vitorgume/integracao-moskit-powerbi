@@ -16,18 +16,13 @@ public class AtualizaService {
 
     public String gatewayAtualizacoes() {
         int quantidadeExecucoesUsuario = usuarioService.atualiza();
-////        String statusNegocio = negocioService.atualiza();
         int quantidadeExecucoesFunil = funilService.atualiza();
         int quantidadeExecucoesFase = faseService.atualiza();
-////        String statusEmpresa = empresaService.atualiza();
-//
-//        if(statusEmpresa.equals("ERRO") || statusNegocio.equals("ERRO")
-//                || statusUsuario.equals("ERRO") || statusFunil.equals("ERRO")
-//                || statusFase.equals("ERRO")) {
-//            return "Operação não ocorreu com sucesso";
-//        }
+        int quantidadeExecucoesEmpresa = empresaService.atualiza();
+        int quantidadeExecucoesNegocio = negocioService.atualiza();
 
-        int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase;
+        int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase
+                + quantidadeExecucoesEmpresa + quantidadeExecucoesNegocio;
 
         return "Operação concluida com sucesso, quantidade de operações: " + total;
     }

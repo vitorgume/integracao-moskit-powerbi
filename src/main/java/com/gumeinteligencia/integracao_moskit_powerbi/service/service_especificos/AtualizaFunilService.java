@@ -46,7 +46,7 @@ public class AtualizaFunilService implements Atualiza<FunilDto> {
             throw new RuntimeException("Nenhum fúnil encontrado");
         }
 
-        List<Funil> funisAntigos = dataProvider.listarUsuario().stream().map(FunilMapper::paraDomain).toList();
+        List<Funil> funisAntigos = dataProvider.listarFunis().stream().map(FunilMapper::paraDomain).toList();
 
         List<Funil> funisCadastrar = funisNovos.stream()
                 .filter(funilNovo ->

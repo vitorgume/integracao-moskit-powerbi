@@ -30,11 +30,15 @@ public class NegocioMapper {
                 .build();
     }
 
-//    public static Negocio paraDomainDeDto(NegocioDto dto) {
-//        return Negocio.builder()
-//                .name(dto.name())
-//                .price(dto.price())
-//                .stage(dto.stage())
-//                .status(dto)
-//    }
+    public static Negocio paraDomainDeDto(NegocioDto dto) {
+        return Negocio.builder()
+                .id(dto.id())
+                .name(dto.name())
+                .price(dto.price())
+                .stage(FaseMapper.paraDomainDeDto(dto.stage()))
+                .status(dto.status())
+                .responsible(UsuarioMapper.paraDomainDeDto(dto.responsible()))
+                .createdBy(UsuarioMapper.paraDomainDeDto(dto.createdBy()))
+                .build();
+    }
 }

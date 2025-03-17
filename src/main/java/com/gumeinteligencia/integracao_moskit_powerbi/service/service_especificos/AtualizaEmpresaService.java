@@ -1,19 +1,17 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.FaseDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.EmpresaDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.EmpresaMapper;
-import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FaseMapper;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.FunilService;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.UsuarioService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.EmpresaDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,16 +28,20 @@ public class AtualizaEmpresaService implements Atualiza<EmpresaDto>{
 
     private final EmpresaDataProvider dataProvider;
 
+    private final UsuarioService usuarioService;
+
     public AtualizaEmpresaService(
             @Value("${moskit.api.key}") String apiKey,
             @Value("${moskit.api.base-url}") String baseUrl,
             WebClient webClient,
-            EmpresaDataProvider dataProvider
+            EmpresaDataProvider dataProvider,
+            UsuarioService usuarioService
     ) {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
         this.webClient = webClient;
         this.dataProvider = dataProvider;
+        this.usuarioService = usuarioService;
     }
 
     @Override
@@ -48,25 +50,26 @@ public class AtualizaEmpresaService implements Atualiza<EmpresaDto>{
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
         if(empresasNovas.isEmpty()) {
-            throw new RuntimeException("Nenhuma fase encontrado");
+            throw new RuntimeException("Nenhuma empresa encontrado");
         }
 
-        List<Fase> fasesAntigas = dataProvider.listarUsuario().stream().map(FaseMapper::paraDomain).toList();
+        List<Empresa> empresasAntigas = dataProvider.listarEmpresas().stream().map(EmpresaMapper::paraDomain).toList();
 
-        List<Fase> fasesCadastrar = empresasNovas.stream()
-                .filter(faseNovo ->
-                        fasesAntigas.stream().noneMatch(faseAntiga ->
-                                faseAntiga.getName().equals(faseNovo.getName())
+        List<Empresa> empresasCadastrar = empresasNovas.stream()
+                .filter(empresaNova ->
+                        empresasAntigas.stream().noneMatch(empresaAntiga ->
+                                empresaAntiga.getName().equals(empresaNova.getName())
                         )
                 )
                 .toList();
 
-        fasesCadastrar.forEach(fase -> {
-            Funil funil = funilService.consultarPorId(fase.getPipeline().getId());
-            fase.setPipeline(funil);
-            Fase fasesSalvas = FaseMapper.paraDomain(dataProvider.salvar(FaseMapper.paraEntity(fase)));
+        empresasCadastrar.forEach(empresa -> {
+            Usuario usuario = usuarioService.consultarPorId(empresa.getResponsible().getId());
+            empresa.setResponsible(usuario);
+            empresa.setCreatedBy(usuario);
+            Empresa empresasSalvas = EmpresaMapper.paraDomain(dataProvider.salvar(EmpresaMapper.paraEntity(empresa)));
             contAtualizacoes.getAndIncrement();
-            System.out.println("Fase salva com sucesso: " + fasesSalvas.toString());
+            System.out.println("Empresa salva com sucesso: " + empresasSalvas.toString());
         });
 
 
@@ -76,14 +79,32 @@ public class AtualizaEmpresaService implements Atualiza<EmpresaDto>{
     @Override
     public List<EmpresaDto> consultaApi() {
         String uri = baseUrl + "/companies";
+        String nextPageToken = null;
+        int quantity = 50;
+        List<EmpresaDto> todasEmpresas = new ArrayList<>();
 
-        List<EmpresaDto> empresas = webClient.get()
-                .uri(uri)
-                .header("apikey", apiKey)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<EmpresaDto>>() {})
-                .block();
+        do {
+            String uriPaginada = nextPageToken == null
+                    ? uri + "?quantity=" + quantity
+                    : uri + "?quantity=" + quantity + "&nextPageToken=" + nextPageToken;
 
-        return empresas;
+            var response = webClient.get()
+                    .uri(uriPaginada)
+                    .header("apikey", apiKey)
+                    .retrieve()
+                    .toEntityList(EmpresaDto.class)
+                    .block();
+
+            if (response != null && response.getBody() != null) {
+                todasEmpresas.addAll(response.getBody());
+            }
+
+            nextPageToken = response != null ? response.getHeaders().getFirst("X-Moskit-Listing-Next-Page-Token") : null;
+
+        } while (nextPageToken != null && !nextPageToken.isEmpty());
+
+        return todasEmpresas;
     }
+
+
 }

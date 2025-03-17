@@ -1,6 +1,5 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.FunilEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repository.FunilRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ public class FunilDataProvider {
 
     private final FunilRepository repository;
 
-    public List<FunilEntity> listarUsuario() {
+    public List<FunilEntity> listarFunis() {
         List<FunilEntity> funisEntities;
 
         try {

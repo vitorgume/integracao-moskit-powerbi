@@ -9,7 +9,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -47,7 +46,7 @@ public class AtualizaUsuarioService implements Atualiza<UsuarioDto>{
             throw new RuntimeException("Nenhum usuário encontrado");
         }
 
-        List<Usuario> usuariosAntigos = dataProvider.listarUsuario().stream().map(UsuarioMapper::paraDomain).toList();
+        List<Usuario> usuariosAntigos = dataProvider.listarUsuarios().stream().map(UsuarioMapper::paraDomain).toList();
 
         List<Usuario> usuariosCadastrar = usuariosNovos.stream()
                 .filter(usuarioNovo ->

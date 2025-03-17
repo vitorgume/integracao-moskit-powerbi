@@ -26,4 +26,11 @@ public class FunilMapper {
                 .name(dto.name())
                 .build();
     }
+
+    public static FunilDto paraDto(Funil funilStage) {
+        return FunilDto.builder()
+                .id(funilStage.getId())
+                .name(funilStage.getName())
+                .build();
+    }
 }
