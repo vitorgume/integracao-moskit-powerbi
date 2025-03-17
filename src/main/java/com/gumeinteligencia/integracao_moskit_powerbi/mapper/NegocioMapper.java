@@ -4,6 +4,9 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.NegocioEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+
 public class NegocioMapper {
 
     public static Negocio paraDomain(NegocioEntity entity) {
@@ -15,6 +18,9 @@ public class NegocioMapper {
                 .status(entity.getStatus())
                 .responsible(UsuarioMapper.paraDomain(entity.getResponsible()))
                 .createdBy(UsuarioMapper.paraDomain(entity.getCreatedBy()))
+                .dateCreated(entity.getDateCreated())
+                .previsionCloseDate(entity.getPrevisionCloseDate())
+                .closeDate(entity.getCloseDate())
                 .build();
     }
 
@@ -27,6 +33,9 @@ public class NegocioMapper {
                 .status(domain.getStatus())
                 .responsible(UsuarioMapper.paraEntity(domain.getResponsible()))
                 .createdBy(UsuarioMapper.paraEntity(domain.getCreatedBy()))
+                .dateCreated(domain.getDateCreated())
+                .previsionCloseDate(domain.getPrevisionCloseDate())
+                .closeDate(domain.getCloseDate())
                 .build();
     }
 
@@ -39,6 +48,19 @@ public class NegocioMapper {
                 .status(dto.status())
                 .responsible(UsuarioMapper.paraDomainDeDto(dto.responsible()))
                 .createdBy(UsuarioMapper.paraDomainDeDto(dto.createdBy()))
+                .dateCreated(trasnformaData(dto.dateCreated()))
+                .previsionCloseDate(trasnformaData(dto.previsionCloseDate()))
+                .closeDate(trasnformaData(dto.closeDate()))
                 .build();
+    }
+
+    private static LocalDate trasnformaData(String data) {
+        if(data != null) {
+            OffsetDateTime offsetDateTime = OffsetDateTime.parse(data);
+            LocalDate dataTransformada = offsetDateTime.toLocalDate();
+            return dataTransformada;
+        } else {
+            return null;
+        }
     }
 }
