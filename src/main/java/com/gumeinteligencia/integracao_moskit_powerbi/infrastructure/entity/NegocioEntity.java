@@ -1,12 +1,12 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Qualificacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.StatusNegocio;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity(name = "Negocio")
 @Table(name = "negocios")
@@ -48,4 +48,7 @@ public class NegocioEntity {
 
     @Column(name = "close_Date")
     private LocalDate closeDate;
+
+    @Enumerated(EnumType.STRING)
+    private Qualificacao qualificacao;
 }

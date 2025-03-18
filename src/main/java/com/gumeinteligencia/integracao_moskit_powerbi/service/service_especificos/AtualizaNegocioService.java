@@ -58,6 +58,7 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
 
     @Override
     public int atualiza() {
+        System.out.println("Começando atualização de negócios...");
         List<Negocio> negociosNovos = consultaApi().stream().map(NegocioMapper::paraDomainDeDto).toList();
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
@@ -88,12 +89,13 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
             System.out.println("Negócio salvo com sucesso: " + negocioSalvo);
         });
 
-
+        System.out.println("Finalizado atualizações de negócios...");
         return contAtualizacoes.get();
     }
 
     @Override
     public List<NegocioDto> consultaApi() {
+        System.out.println("Consultando negócios na api...");
         String uri = baseUrl + "/deals";
         String nextPageToken = null;
         int quantity = 50;
@@ -111,6 +113,8 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
                     .toEntityList(NegocioDto.class)
                     .block();
 
+            System.out.println("\nResponse: " + response.getBody());
+
             if (response != null && response.getBody() != null) {
                 todosNegocios = new ArrayList<>(todosNegocios.stream().map(this::buscaFunil).toList());
                 todosNegocios.addAll(response.getBody());
@@ -120,6 +124,7 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
 
         } while (nextPageToken != null && !nextPageToken.isEmpty());
 
+        System.out.println("Finalizado consultas de negócios na api...");
         return todosNegocios;
     }
 

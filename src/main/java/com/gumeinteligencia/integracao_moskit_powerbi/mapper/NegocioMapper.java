@@ -1,11 +1,15 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Qualificacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.NegocioEntity;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class NegocioMapper {
 
@@ -21,6 +25,7 @@ public class NegocioMapper {
                 .dateCreated(entity.getDateCreated())
                 .previsionCloseDate(entity.getPrevisionCloseDate())
                 .closeDate(entity.getCloseDate())
+                .qualificacao(entity.getQualificacao())
                 .build();
     }
 
@@ -36,6 +41,7 @@ public class NegocioMapper {
                 .dateCreated(domain.getDateCreated())
                 .previsionCloseDate(domain.getPrevisionCloseDate())
                 .closeDate(domain.getCloseDate())
+                .qualificacao(domain.getQualificacao())
                 .build();
     }
 
@@ -51,6 +57,7 @@ public class NegocioMapper {
                 .dateCreated(trasnformaData(dto.dateCreated()))
                 .previsionCloseDate(trasnformaData(dto.previsionCloseDate()))
                 .closeDate(trasnformaData(dto.closeDate()))
+                .qualificacao(organizaQualificacao(dto))
                 .build();
     }
 
@@ -62,5 +69,31 @@ public class NegocioMapper {
         } else {
             return null;
         }
+    }
+
+    private static Qualificacao organizaQualificacao(NegocioDto dto) {
+        Optional<CampoPersonalizadoDto> campoPersonalizadoOptional = dto
+                .entityCustomFields()
+                .stream()
+                .filter(campoPersonalizadoDto -> campoPersonalizadoDto.id().equals("CF_8P5q4Vi6ioJ7lmRJ"))
+                .findFirst();
+
+        Qualificacao qualificacao = null;
+
+        if(campoPersonalizadoOptional.isPresent()) {
+            CampoPersonalizadoDto campoPersonalizado = campoPersonalizadoOptional.get();
+            Integer codigoOption = campoPersonalizado.options().get(0);
+
+            qualificacao = Arrays.stream(Qualificacao.values())
+                    .filter(q -> q.getCodigo().equals(codigoOption))
+                    .findFirst()
+                    .orElse(null);
+
+            if(qualificacao == null) {
+                throw new RuntimeException("Qualificação com não encontrada com id: " + codigoOption);
+            }
+        }
+
+        return qualificacao;
     }
 }
