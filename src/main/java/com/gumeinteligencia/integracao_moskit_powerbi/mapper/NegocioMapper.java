@@ -47,53 +47,35 @@ public class NegocioMapper {
 
     public static Negocio paraDomainDeDto(NegocioDto dto) {
         return Negocio.builder()
-                .id(dto.id())
-                .name(dto.name())
-                .price(dto.price())
-                .stage(FaseMapper.paraDomainDeDto(dto.stage()))
-                .status(dto.status())
-                .responsible(UsuarioMapper.paraDomainDeDto(dto.responsible()))
-                .createdBy(UsuarioMapper.paraDomainDeDto(dto.createdBy()))
-                .dateCreated(trasnformaData(dto.dateCreated()))
-                .previsionCloseDate(trasnformaData(dto.previsionCloseDate()))
-                .closeDate(trasnformaData(dto.closeDate()))
-                .qualificacao(organizaQualificacao(dto))
+                .id(dto.getId())
+                .name(dto.getName())
+                .price(dto.getPrice())
+                .stage(FaseMapper.paraDomainDeDto(dto.getStage()))
+                .status(dto.getStatus())
+                .responsible(UsuarioMapper.paraDomainDeDto(dto.getResponsible()))
+                .createdBy(UsuarioMapper.paraDomainDeDto(dto.getCreatedBy()))
+                .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
+                .previsionCloseDate(MapperData.trasnformaData(dto.getPrevisionCloseDate()))
+                .closeDate(MapperData.trasnformaData(dto.getCloseDate()))
+                .qualificacao(MapperQualificacao.organizaQualificacao(dto))
                 .build();
     }
 
-    private static LocalDate trasnformaData(String data) {
-        if(data != null) {
-            OffsetDateTime offsetDateTime = OffsetDateTime.parse(data);
-            LocalDate dataTransformada = offsetDateTime.toLocalDate();
-            return dataTransformada;
-        } else {
-            return null;
-        }
-    }
+//    public static NegocioDto paraDto(Negocio domain) {
+//        return NegocioDto.builder()
+//                .id(domain.getId())
+//                .name(domain.getName())
+//                .price(domain.getPrice())
+//                .stage(FaseMapper.paraDto(domain.getStage()))
+//                .status(domain.getStatus())
+//                .responsible(UsuarioMapper.paraDto(domain.getResponsible()))
+//                .createdBy(UsuarioMapper.paraDto(domain.getCreatedBy()))
+//                .dateCreated(domain.getDateCreated().toString())
+//                .previsionCloseDate(domain.getPrevisionCloseDate().toString())
+//                .closeDate(domain.getCloseDate().toString())
+//                .entityCustomFields()
+//    }
 
-    private static Qualificacao organizaQualificacao(NegocioDto dto) {
-        Optional<CampoPersonalizadoDto> campoPersonalizadoOptional = dto
-                .entityCustomFields()
-                .stream()
-                .filter(campoPersonalizadoDto -> campoPersonalizadoDto.id().equals("CF_8P5q4Vi6ioJ7lmRJ"))
-                .findFirst();
 
-        Qualificacao qualificacao = null;
 
-        if(campoPersonalizadoOptional.isPresent()) {
-            CampoPersonalizadoDto campoPersonalizado = campoPersonalizadoOptional.get();
-            Integer codigoOption = campoPersonalizado.options().get(0);
-
-            qualificacao = Arrays.stream(Qualificacao.values())
-                    .filter(q -> q.getCodigo().equals(codigoOption))
-                    .findFirst()
-                    .orElse(null);
-
-            if(qualificacao == null) {
-                throw new RuntimeException("Qualificação com não encontrada com id: " + codigoOption);
-            }
-        }
-
-        return qualificacao;
-    }
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -36,5 +37,17 @@ public class NegocioDataProvider {
         }
 
         return negocioSalvo;
+    }
+
+    public Optional<NegocioEntity> consultarPorId(Integer id) {
+        Optional<NegocioEntity> negocioEntity;
+
+        try {
+            negocioEntity = repository.findById(id);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+
+        return negocioEntity;
     }
 }

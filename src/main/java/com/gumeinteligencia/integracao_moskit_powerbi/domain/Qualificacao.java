@@ -10,7 +10,8 @@ public enum Qualificacao {
     FRIA(424096),
     MORNA(424097),
     QUENTE(424099),
-    MUITO_QUENTE(424098);
+    MUITO_QUENTE(424098),
+    SEM_QUALIFICACAO(0);
 
     private final Integer codigo;
 }

@@ -6,21 +6,24 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.NegocioDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.mapper.MapperData;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.NegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.FaseService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.FunilService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.UsuarioService;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class AtualizaNegocioService implements Atualiza<NegocioDto>{
+public class AtualizaNegocioService implements Atualiza<NegocioDto> {
 
     @Value("${moskit.api.key}")
     private final String apiKey;
@@ -59,10 +62,25 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
     @Override
     public int atualiza() {
         System.out.println("Começando atualização de negócios...");
-        List<Negocio> negociosNovos = consultaApi().stream().map(NegocioMapper::paraDomainDeDto).toList();
+        List<NegocioDto> negociosDtos = consultaApi();
+
+        List<Negocio> negociosNovos = negociosDtos.stream()
+                .peek(negocio -> {
+                    List<CampoPersonalizadoDto> camposPersonalizado = negocio.getEntityCustomFields()
+                            .stream()
+                            .filter(campoPersonalizado -> campoPersonalizado.id().equals("CF_8P5q4Vi6ioJ7lmRJ"))
+                            .toList();
+
+                    negocio.setEntityCustomFields(camposPersonalizado);
+                })
+                .toList()
+                .stream()
+                .map(NegocioMapper::paraDomainDeDto)
+                .toList();
+
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
-        if(negociosNovos.isEmpty()) {
+        if (negociosNovos.isEmpty()) {
             throw new RuntimeException("Nenhum negócio encontrado");
         }
 
@@ -90,6 +108,7 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
         });
 
         System.out.println("Finalizado atualizações de negócios...");
+        System.out.println("Quantidade de operações: " + contAtualizacoes.get());
         return contAtualizacoes.get();
     }
 
@@ -113,15 +132,21 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
                     .toEntityList(NegocioDto.class)
                     .block();
 
-            System.out.println("\nResponse: " + response.getBody());
+
 
             if (response != null && response.getBody() != null) {
-                todosNegocios = new ArrayList<>(todosNegocios.stream().map(this::buscaFunil).toList());
-                todosNegocios.addAll(response.getBody());
+                List<NegocioDto> negociosFiltrados = new ArrayList<>(response.getBody()
+                        .stream()
+                        .filter(negocio -> MapperData
+                                .trasnformaData(negocio.getDateCreated()).isAfter(LocalDate.of(2025, 01, 01))
+                        )
+                        .toList()
+                );
+
+                todosNegocios.addAll(new ArrayList<>(negociosFiltrados.stream().map(this::buscaFunil).toList()));
             }
 
             nextPageToken = response != null ? response.getHeaders().getFirst("X-Moskit-Listing-Next-Page-Token") : null;
-
         } while (nextPageToken != null && !nextPageToken.isEmpty());
 
         System.out.println("Finalizado consultas de negócios na api...");
@@ -129,9 +154,9 @@ public class AtualizaNegocioService implements Atualiza<NegocioDto>{
     }
 
     private NegocioDto buscaFunil(NegocioDto negocio) {
-        Fase fase = faseService.consultarPorId(negocio.stage().getId());
+        Fase fase = faseService.consultarPorId(negocio.getStage().getId());
         Funil funilStage = funilService.consultarPorId(fase.getPipeline().getId());
-        negocio.stage().setPipeline(FunilMapper.paraDto(funilStage));
+        negocio.getStage().setPipeline(FunilMapper.paraDto(funilStage));
         return negocio;
     }
 }

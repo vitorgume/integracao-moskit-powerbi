@@ -29,4 +29,12 @@ public class FaseMapper {
                 .pipeline(FunilMapper.paraDomainDeDto(dto.getPipeline()))
                 .build();
     }
+
+    public static FaseDto paraDto(Fase domain) {
+        return FaseDto.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .pipeline(FunilMapper.paraDto(domain.getPipeline()))
+                .build();
+    }
 }

@@ -32,4 +32,13 @@ public class UsuarioMapper {
                 .userName(dto.userName())
                 .build();
     }
+
+    public static UsuarioDto paraDto(Usuario domain) {
+        return UsuarioDto.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .active(domain.getActive())
+                .userName(domain.getUserName())
+                .build();
+    }
 }
