@@ -1,15 +1,15 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacoesNegocios;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.MovimentacoesNegociosEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.MovimentacoesNegociosDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.MovimentacaoNegocioEntity;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.MovimentacaoNegociosDto;
 
-public class MovimentacaoNegociosMapper {
+public class MovimentacaoNegocioMapper {
 
-    public static MovimentacoesNegocios paraDomain(MovimentacoesNegociosEntity entity) {
+    public static MovimentacaoNegocio paraDomain(MovimentacaoNegocioEntity entity) {
 
         if(entity.getFaseAntiga() == null) {
-            return MovimentacoesNegocios.builder()
+            return MovimentacaoNegocio.builder()
                     .id(entity.getId())
                     .negocio(NegocioMapper.paraDomain(entity.getNegocio()))
                     .dataCriacao(entity.getDataCriacao())
@@ -17,7 +17,7 @@ public class MovimentacaoNegociosMapper {
                     .primeiraNavegacao(entity.getPrimeiraNavegacao())
                     .build();
         } else {
-            return MovimentacoesNegocios.builder()
+            return MovimentacaoNegocio.builder()
                     .id(entity.getId())
                     .negocio(NegocioMapper.paraDomain(entity.getNegocio()))
                     .dataCriacao(entity.getDataCriacao())
@@ -29,10 +29,10 @@ public class MovimentacaoNegociosMapper {
 
     }
 
-    public static MovimentacoesNegociosEntity paraEntity(MovimentacoesNegocios domain) {
+    public static MovimentacaoNegocioEntity paraEntity(MovimentacaoNegocio domain) {
 
         if(domain.getFaseAntiga() == null) {
-            return MovimentacoesNegociosEntity.builder()
+            return MovimentacaoNegocioEntity.builder()
                     .id(domain.getId())
                     .negocio(NegocioMapper.paraEntity(domain.getNegocio()))
                     .dataCriacao(domain.getDataCriacao())
@@ -40,7 +40,7 @@ public class MovimentacaoNegociosMapper {
                     .primeiraNavegacao(domain.getPrimeiraNavegacao())
                     .build();
         } else {
-            return MovimentacoesNegociosEntity.builder()
+            return MovimentacaoNegocioEntity.builder()
                     .id(domain.getId())
                     .negocio(NegocioMapper.paraEntity(domain.getNegocio()))
                     .dataCriacao(domain.getDataCriacao())
@@ -51,9 +51,9 @@ public class MovimentacaoNegociosMapper {
         }
     }
 
-    public static MovimentacoesNegocios paraDomainDeDto(MovimentacoesNegociosDto dto) {
+    public static MovimentacaoNegocio paraDomainDeDto(MovimentacaoNegociosDto dto) {
         if(dto.getOldStage() == null) {
-            return MovimentacoesNegocios.builder()
+            return MovimentacaoNegocio.builder()
                     .id(dto.getId())
                     .negocio(NegocioMapper.paraDomainDeDto(dto.getDeal()))
                     .dataCriacao(MapperData.trasnformaData(dto.getDateCreated()))
@@ -61,7 +61,7 @@ public class MovimentacaoNegociosMapper {
                     .primeiraNavegacao(dto.getFirstNavigation())
                     .build();
         } else {
-            return MovimentacoesNegocios.builder()
+            return MovimentacaoNegocio.builder()
                     .id(dto.getId())
                     .negocio(NegocioMapper.paraDomainDeDto(dto.getDeal()))
                     .dataCriacao(MapperData.trasnformaData(dto.getDateCreated()))

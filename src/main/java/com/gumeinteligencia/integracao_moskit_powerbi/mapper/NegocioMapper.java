@@ -1,15 +1,8 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Qualificacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.NegocioEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
-
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.Optional;
 
 public class NegocioMapper {
 
@@ -57,7 +50,7 @@ public class NegocioMapper {
                 .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
                 .previsionCloseDate(MapperData.trasnformaData(dto.getPrevisionCloseDate()))
                 .closeDate(MapperData.trasnformaData(dto.getCloseDate()))
-                .qualificacao(MapperQualificacao.organizaQualificacao(dto))
+                .qualificacao(MapperEnum.organizaQualificacao(dto))
                 .build();
     }
 

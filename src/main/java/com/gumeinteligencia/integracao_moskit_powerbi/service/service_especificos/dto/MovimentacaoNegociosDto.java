@@ -2,14 +2,12 @@ package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especific
 
 import lombok.*;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 @Builder
-public class MovimentacoesNegociosDto {
+public class MovimentacaoNegociosDto {
     private Integer id;
     private String dateCreated;
     private FaseDto currentStage;

@@ -1,7 +1,5 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.domain;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,7 +9,7 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @Builder
-public class MovimentacoesNegocios {
+public class MovimentacaoNegocio {
     private Integer id;
     private LocalDate dataCriacao;
     private Fase faseAtual;

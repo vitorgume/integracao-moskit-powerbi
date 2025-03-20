@@ -1,4 +1,4 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos;
+package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.negocio;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
@@ -11,6 +11,7 @@ import com.gumeinteligencia.integracao_moskit_powerbi.mapper.NegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.FaseService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.FunilService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.UsuarioService;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.Atualiza;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 import org.springframework.beans.factory.annotation.Value;

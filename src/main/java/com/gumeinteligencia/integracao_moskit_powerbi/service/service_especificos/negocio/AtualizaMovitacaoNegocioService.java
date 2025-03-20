@@ -1,17 +1,17 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos;
+package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.negocio;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacoesNegocios;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.MovimentacoesNegociosDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.MovimentacaoNegocioDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FaseMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
-import com.gumeinteligencia.integracao_moskit_powerbi.mapper.MovimentacaoNegociosMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.mapper.MovimentacaoNegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.UsuarioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.*;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.MovimentacoesNegociosDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.MovimentacaoNegociosDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class AtualizaMovitacoesNegociosService {
+public class AtualizaMovitacaoNegocioService {
 
     @Value("${moskit.api.key}")
     private final String apiKey;
@@ -33,7 +33,7 @@ public class AtualizaMovitacoesNegociosService {
 
     private final WebClient webClient;
 
-    private final MovimentacoesNegociosDataProvider dataProvider;
+    private final MovimentacaoNegocioDataProvider dataProvider;
 
     private final UsuarioService usuarioService;
 
@@ -43,18 +43,18 @@ public class AtualizaMovitacoesNegociosService {
 
     private final FunilService funilService;
 
-    private final MovimentacoesNegociosService movimentacoesNegociosService;
+    private final MovimentacaoNegocioService movimentacaoNegocioService;
 
-    public AtualizaMovitacoesNegociosService(
+    public AtualizaMovitacaoNegocioService(
             @Value("${moskit.api.key}") String apiKey,
             @Value("${moskit.api.base-url}") String baseUrl,
             WebClient webClient,
-            MovimentacoesNegociosDataProvider dataProvider,
+            MovimentacaoNegocioDataProvider dataProvider,
             UsuarioService usuarioService,
             FaseService faseService,
             NegocioService negocioService,
             FunilService funilService,
-            MovimentacoesNegociosService movimentacoesNegociosService
+            MovimentacaoNegocioService movimentacaoNegocioService
     ) {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
@@ -64,17 +64,17 @@ public class AtualizaMovitacoesNegociosService {
         this.faseService = faseService;
         this.negocioService = negocioService;
         this.funilService = funilService;
-        this.movimentacoesNegociosService = movimentacoesNegociosService;
+        this.movimentacaoNegocioService = movimentacaoNegocioService;
     }
 
     public int atualiza() {
         System.out.println("Começando atualizações de movimentações...");
 
         List<Negocio> todosNegocios = negocioService.listar();
-        List<MovimentacoesNegocios> movimentacoesNegociosList = movimentacoesNegociosService.listar();
+        List<MovimentacaoNegocio> movimentacaoNegocioList = movimentacaoNegocioService.listar();
 
         List<Negocio> negociosSemMovimentacao = todosNegocios.stream()
-                .filter(negocio -> movimentacoesNegociosList.stream()
+                .filter(negocio -> movimentacaoNegocioList.stream()
                         .noneMatch(movimentacao -> movimentacao.getNegocio().getId().equals(negocio.getId())))
                 .toList();
 
@@ -85,21 +85,21 @@ public class AtualizaMovitacoesNegociosService {
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
         negociosSemMovimentacao.forEach(negocio -> {
-            List<MovimentacoesNegocios> movimentacoes = consultaApi(negocio.getId())
+            List<MovimentacaoNegocio> movimentacoes = consultaApi(negocio.getId())
                     .stream()
-                    .map(MovimentacaoNegociosMapper::paraDomainDeDto)
+                    .map(MovimentacaoNegocioMapper::paraDomainDeDto)
                     .toList();
 
             if (movimentacoes.isEmpty()) {
                 throw new RuntimeException("Nenhuma movimentação encontrada");
             }
 
-            List<MovimentacoesNegocios> movimentacoesAntigas = dataProvider.listar()
+            List<MovimentacaoNegocio> movimentacoesAntigas = dataProvider.listar()
                     .stream()
-                    .map(MovimentacaoNegociosMapper::paraDomain)
+                    .map(MovimentacaoNegocioMapper::paraDomain)
                     .toList();
 
-            List<MovimentacoesNegocios> movimentacoesCadastrar = movimentacoes.stream()
+            List<MovimentacaoNegocio> movimentacoesCadastrar = movimentacoes.stream()
                     .filter(movimentacaoNova ->
                             movimentacoesAntigas.stream().noneMatch(movimentacaoAntiga ->
                                     movimentacaoAntiga.getId().equals(movimentacaoNova.getId())
@@ -108,7 +108,7 @@ public class AtualizaMovitacoesNegociosService {
                     .toList();
 
             movimentacoesCadastrar.forEach(movimentacao -> {
-                MovimentacoesNegocios movimentacaoSalva =  MovimentacaoNegociosMapper.paraDomain(dataProvider.salvar(MovimentacaoNegociosMapper.paraEntity(movimentacao)));
+                MovimentacaoNegocio movimentacaoSalva =  MovimentacaoNegocioMapper.paraDomain(dataProvider.salvar(MovimentacaoNegocioMapper.paraEntity(movimentacao)));
                 contAtualizacoes.getAndIncrement();
                 System.out.println("Movimentação salva com sucesso: " + movimentacaoSalva);
             });
@@ -121,13 +121,13 @@ public class AtualizaMovitacoesNegociosService {
         return contAtualizacoes.get();
     }
 
-    public List<MovimentacoesNegociosDto> consultaApi(Integer idNegocio) {
+    public List<MovimentacaoNegociosDto> consultaApi(Integer idNegocio) {
         System.out.println("Consultando movimentações na API...");
 
         String uri = baseUrl + "/deals/" + idNegocio + "/movements";
         String nextPageToken = null;
         int quantity = 50;
-        List<MovimentacoesNegociosDto> todasMovimentacoes = new ArrayList<>();
+        List<MovimentacaoNegociosDto> todasMovimentacoes = new ArrayList<>();
 
         do {
             String uriPaginada = nextPageToken == null
@@ -138,7 +138,7 @@ public class AtualizaMovitacoesNegociosService {
                     .uri(uriPaginada)
                     .header("apikey", apiKey)
                     .retrieve()
-                    .toEntityList(MovimentacoesNegociosDto.class)
+                    .toEntityList(MovimentacaoNegociosDto.class)
                     .block();
 
             if (response != null && response.getBody() != null) {
@@ -153,7 +153,7 @@ public class AtualizaMovitacoesNegociosService {
         return todasMovimentacoes;
     }
 
-    private MovimentacoesNegociosDto buscaDadosNecessarios(MovimentacoesNegociosDto movimentacao) {
+    private MovimentacaoNegociosDto buscaDadosNecessarios(MovimentacaoNegociosDto movimentacao) {
         Fase faseAtual;
 
         if(movimentacao.getCurrentStage() == null) {

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class MovimentacoesNegociosEntity {
+public class MovimentacaoNegocioEntity {
 
     @Id
     @Column(name = "id_movitacoes_negocios")
