@@ -5,11 +5,11 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacoesNegocios;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.MovimentacoesNegociosDataProvider;
-import com.gumeinteligencia.integracao_moskit_powerbi.mapper.*;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.FaseService;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.FunilService;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.NegocioService;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.UsuarioService;
+import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FaseMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.mapper.MovimentacaoNegociosMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.mapper.UsuarioMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.*;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.MovimentacoesNegociosDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
@@ -43,6 +43,8 @@ public class AtualizaMovitacoesNegociosService {
 
     private final FunilService funilService;
 
+    private final MovimentacoesNegociosService movimentacoesNegociosService;
+
     public AtualizaMovitacoesNegociosService(
             @Value("${moskit.api.key}") String apiKey,
             @Value("${moskit.api.base-url}") String baseUrl,
@@ -51,7 +53,8 @@ public class AtualizaMovitacoesNegociosService {
             UsuarioService usuarioService,
             FaseService faseService,
             NegocioService negocioService,
-            FunilService funilService
+            FunilService funilService,
+            MovimentacoesNegociosService movimentacoesNegociosService
     ) {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
@@ -61,12 +64,19 @@ public class AtualizaMovitacoesNegociosService {
         this.faseService = faseService;
         this.negocioService = negocioService;
         this.funilService = funilService;
+        this.movimentacoesNegociosService = movimentacoesNegociosService;
     }
 
     public int atualiza() {
         System.out.println("Começando atualizações de movimentações...");
 
         List<Negocio> todosNegocios = negocioService.listar();
+        List<MovimentacoesNegocios> movimentacoesNegociosList = movimentacoesNegociosService.listar();
+
+        List<Negocio> negociosSemMovimentacao = todosNegocios.stream()
+                .filter(negocio -> movimentacoesNegociosList.stream()
+                        .noneMatch(movimentacao -> movimentacao.getNegocio().getId().equals(negocio.getId())))
+                .toList();
 
         if(todosNegocios.isEmpty()) {
             throw new RuntimeException("Nenhum negócio encontrado.");
@@ -74,7 +84,7 @@ public class AtualizaMovitacoesNegociosService {
 
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
-        todosNegocios.forEach(negocio -> {
+        negociosSemMovimentacao.forEach(negocio -> {
             List<MovimentacoesNegocios> movimentacoes = consultaApi(negocio.getId())
                     .stream()
                     .map(MovimentacaoNegociosMapper::paraDomainDeDto)
@@ -98,13 +108,6 @@ public class AtualizaMovitacoesNegociosService {
                     .toList();
 
             movimentacoesCadastrar.forEach(movimentacao -> {
-                Fase faseAtual = faseService.consultarPorId(movimentacao.getFaseAtual().getId());
-                Fase faseAntiga = faseService.consultarPorId(movimentacao.getFaseAntiga().getId());
-
-                movimentacao.setFaseAtual(faseAtual);
-                movimentacao.setFaseAntiga(faseAntiga);
-                movimentacao.setNegocio(negocio);
-
                 MovimentacoesNegocios movimentacaoSalva =  MovimentacaoNegociosMapper.paraDomain(dataProvider.salvar(MovimentacaoNegociosMapper.paraEntity(movimentacao)));
                 contAtualizacoes.getAndIncrement();
                 System.out.println("Movimentação salva com sucesso: " + movimentacaoSalva);
@@ -151,8 +154,15 @@ public class AtualizaMovitacoesNegociosService {
     }
 
     private MovimentacoesNegociosDto buscaDadosNecessarios(MovimentacoesNegociosDto movimentacao) {
+        Fase faseAtual;
 
-        Fase faseAtual = faseService.consultarPorId(movimentacao.getCurrentStage().getId());
+        if(movimentacao.getCurrentStage() == null) {
+            faseAtual = negocioService.consultarPorId(movimentacao.getDeal().getId()).getStage();
+            movimentacao.setCurrentStage(FaseMapper.paraDto(faseAtual));
+        } else {
+            faseAtual = faseService.consultarPorId(movimentacao.getCurrentStage().getId());
+        }
+
         Funil funilStageAtual = funilService.consultarPorId(faseAtual.getPipeline().getId());
         movimentacao.getCurrentStage().setPipeline(FunilMapper.paraDto(funilStageAtual));
 
@@ -161,6 +171,8 @@ public class AtualizaMovitacoesNegociosService {
             Funil funilStageAntigo = funilService.consultarPorId(faseAntiga.getPipeline().getId());
             movimentacao.getOldStage().setPipeline(FunilMapper.paraDto(funilStageAntigo));
         }
+
+        NegocioDto negocioDto = negocioService.consultaPorIdNaApi(movimentacao.getDeal().getId());
 
         Negocio negocio = negocioService.consultarPorId(movimentacao.getDeal().getId());
         FaseDto fase = FaseMapper.paraDto(faseService.consultarPorId(negocio.getStage().getId()));
@@ -173,6 +185,7 @@ public class AtualizaMovitacoesNegociosService {
         movimentacao.getDeal().setStage(fase);
         movimentacao.getDeal().setResponsible(usuarioResponsavel);
         movimentacao.getDeal().setCreatedBy(usuarioCriador);
+        movimentacao.getDeal().setEntityCustomFields(negocioDto.getEntityCustomFields());
 
         return movimentacao;
     }

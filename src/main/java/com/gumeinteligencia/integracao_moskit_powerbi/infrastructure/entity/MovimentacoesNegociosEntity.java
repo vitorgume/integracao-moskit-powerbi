@@ -5,8 +5,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Entity(name = "MovitacoesNegocios")
-@Table(name = "movitacoes_negocios")
+@Entity(name = "MovimentacoesNegocios")
+@Table(name = "movimentacoes_negocios")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,7 +26,7 @@ public class MovimentacoesNegociosEntity {
     private FaseEntity faseAtual;
 
     @ManyToOne
-    @JoinColumn(name = "id_fase_antiga", nullable = false)
+    @JoinColumn(name = "id_fase_antiga")
     private FaseEntity faseAntiga;
 
     @ManyToOne

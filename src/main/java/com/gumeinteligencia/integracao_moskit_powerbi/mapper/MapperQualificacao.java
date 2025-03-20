@@ -14,20 +14,26 @@ public class MapperQualificacao {
         } else {
             if (!dto.getEntityCustomFields().isEmpty()) {
                 CampoPersonalizadoDto campoPersonalizado = dto.getEntityCustomFields().get(0);
-                Integer codigoOption = campoPersonalizado.options().get(0);
 
-                Qualificacao qualificacao;
+                if(campoPersonalizado.options() != null) {
+                    Integer codigoOption = campoPersonalizado.options().get(0);
 
-                qualificacao = Arrays.stream(Qualificacao.values())
-                        .filter(q -> q.getCodigo().equals(codigoOption))
-                        .findFirst()
-                        .orElse(null);
+                    Qualificacao qualificacao;
 
-                if (qualificacao == null) {
-                    throw new RuntimeException("Qualificação com não encontrada com id: " + codigoOption);
+                    qualificacao = Arrays.stream(Qualificacao.values())
+                            .filter(q -> q.getCodigo().equals(codigoOption))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (qualificacao == null) {
+//                        throw new RuntimeException("Qualificação não encontrada com id: " + codigoOption);
+                        return Qualificacao.SEM_QUALIFICACAO;
+                    }
+
+                    return qualificacao;
+                } else {
+                    return Qualificacao.SEM_QUALIFICACAO;
                 }
-
-                return qualificacao;
             } else {
                 return Qualificacao.SEM_QUALIFICACAO;
             }
