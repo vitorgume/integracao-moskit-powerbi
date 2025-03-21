@@ -20,7 +20,6 @@ public class Negocio {
     private StatusNegocio status;
     private Fase stage;
     private LocalDate dateCreated;
-    private LocalDate previsionCloseDate;
     private LocalDate closeDate;
     private Qualificacao qualificacao;
 }

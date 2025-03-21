@@ -17,22 +17,19 @@ public class AtualizaService {
     private final AtualizaFaseService faseService;
     private final AtualizaEmpresaService empresaService;
     private final AtualizaMovitacaoNegocioService movitacoesNegociosService;
-    private final AtualizaAtividadeNegocioService atividadesNegocioService;
+//    private final AtualizaAtividadeNegocioService atividadesNegocioService;
 
     public String gatewayAtualizacoes() {
-//        int quantidadeExecucoesUsuario = usuarioService.atualiza();
-//        int quantidadeExecucoesFunil = funilService.atualiza();
-//        int quantidadeExecucoesFase = faseService.atualiza();
-//        int quantidadeExecucoesEmpresa = empresaService.atualiza();
-//        int quantidadeExecucoesNegocio = negocioService.atualiza();
-//        int quantidadeExecucoesMovimentacoesNegocios = movitacoesNegociosService.atualiza();
-        int quantidadeExecucoesAtividadesNegocios = atividadesNegocioService.atualiza();
+        int quantidadeExecucoesUsuario = usuarioService.atualiza();
+        int quantidadeExecucoesFunil = funilService.atualiza();
+        int quantidadeExecucoesFase = faseService.atualiza();
+        int quantidadeExecucoesEmpresa = empresaService.atualiza();
+        int quantidadeExecucoesNegocio = negocioService.atualiza();
+        int quantidadeExecucoesMovimentacoesNegocios = movitacoesNegociosService.atualiza();
+//        int quantidadeExecucoesAtividadesNegocios = atividadesNegocioService.atualiza();
 
-//        int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase
-//                + quantidadeExecucoesEmpresa + quantidadeExecucoesNegocio + quantidadeExecucoesMovimentacoesNegocios
-//                + quantidadeExecucoesAtividadesNegocios;
-
-        int total = quantidadeExecucoesAtividadesNegocios;
+        int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase
+                + quantidadeExecucoesEmpresa + quantidadeExecucoesNegocio + quantidadeExecucoesMovimentacoesNegocios;
 
         return "Operação concluida com sucesso, quantidade de operações: " + total;
     }

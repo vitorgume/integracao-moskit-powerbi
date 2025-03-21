@@ -43,9 +43,6 @@ public class NegocioEntity {
     @Column(name = "date_created")
     private LocalDate dateCreated;
 
-    @Column(name = "prevision_close_date")
-    private LocalDate previsionCloseDate;
-
     @Column(name = "close_Date")
     private LocalDate closeDate;
 

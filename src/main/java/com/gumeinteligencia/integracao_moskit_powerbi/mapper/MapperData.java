@@ -2,6 +2,8 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 public class MapperData {
     public static LocalDate trasnformaData(String data) {
@@ -12,5 +14,13 @@ public class MapperData {
         } else {
             return null;
         }
+    }
+
+    public static String trasformaDataString(LocalDate data) {
+        OffsetDateTime dateTime = data.atTime(13, 30, 17)
+                .atOffset(ZoneOffset.UTC);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        return dateTime.format(formatter);
     }
 }

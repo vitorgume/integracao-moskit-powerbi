@@ -10,12 +10,14 @@ import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especifico
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -77,9 +79,9 @@ public class AtualizaAtividadeNegocioService implements Atualiza<AtividadeNegoci
 
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
-        if (atividadesAntigas.isEmpty()) {
-            throw new RuntimeException("Nenhuma atividade encontrado");
-        }
+//        if (atividadesNovas.isEmpty()) {
+//            throw new RuntimeException("Nenhuma atividade encontrada.");
+//        }
 
 
         atividadesNovas.forEach(atividade -> {
@@ -99,38 +101,30 @@ public class AtualizaAtividadeNegocioService implements Atualiza<AtividadeNegoci
     public List<AtividadeNegocioDto> consultaApi() {
         System.out.println("Consultando atividades na API...");
 
-        String uri = baseUrl + "/activities";
-        String nextPageToken = null;
-        int quantity = 50;
-        List<AtividadeNegocioDto> todasAtividades = new ArrayList<>();
+        String uri = baseUrl + "/activities/search";
 
-        do {
-            String uriPaginada = nextPageToken == null
-                    ? uri + "?quantity=" + quantity
-                    : uri + "?quantity=" + quantity + "&nextPageToken=" + nextPageToken;
+        List<Map<String, Object>> requestBody = List.of(
+                Map.of(
+                        "field", "dateCreated",
+                        "expression", "gte",
+                        "values", List.of("2025-01-01T00:00:00Z")
+                )
+        );
 
+        var response = webClient.post()
+                .uri(uri) //
+                .header("apikey", apiKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody) // Enviando o corpo JSON
+                .retrieve()
+                .toEntityList(AtividadeNegocioDto.class)
+                .block();
 
-            var response = webClient.get()
-                    .uri(uriPaginada)
-                    .header("apikey", apiKey)
-                    .retrieve()
-                    .toEntityList(AtividadeNegocioDto.class)
-                    .block();
+        if(response == null || response.getBody() == null) {
+            throw new RuntimeException("Nenhuma atividad encontrada.");
+        }
 
-            if (response != null && response.getBody() != null) {
-                List<AtividadeNegocioDto> atividadesFiltradas = new ArrayList<>(response.getBody()
-                        .stream()
-                        .filter(atividade -> MapperData
-                                .trasnformaData(atividade.getDateCreated()).isAfter(LocalDate.of(2025, 01, 01))
-                        )
-                        .toList()
-                );
-
-                todasAtividades.addAll(new ArrayList<>(atividadesFiltradas.stream().map(this::buscaDadosNecessarios).toList()));
-            }
-
-            nextPageToken = response != null ? response.getHeaders().getFirst("X-Moskit-Listing-Next-Page-Token") : null;
-        } while (nextPageToken != null && !nextPageToken.isEmpty());
+        List<AtividadeNegocioDto> todasAtividades = new ArrayList<>(new ArrayList<>(response.getBody().stream().map(this::buscaDadosNecessarios).toList()));
 
         System.out.println("Finalizado consultas de atividades...");
 
@@ -166,7 +160,7 @@ public class AtualizaAtividadeNegocioService implements Atualiza<AtividadeNegoci
 
         List<EmpresaDto> empresas = atividade.getCompanies();
 
-        if(!empresas.isEmpty()) {
+        if (!empresas.isEmpty()) {
             empresas = empresas.stream()
                     .map(empresa -> EmpresaMapper.paraDto(
                                     empresaService.consultarPorId(empresa.id())

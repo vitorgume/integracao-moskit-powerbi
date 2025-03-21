@@ -48,6 +48,7 @@ public class AtualizaFaseService implements Atualiza<FaseDto>{
 
     @Override
     public int atualiza() {
+        System.out.println("Começando atualização de fases...");
         List<Fase> faseNovas = consultaApi().stream().map(FaseMapper::paraDomainDeDto).toList();
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
@@ -73,12 +74,15 @@ public class AtualizaFaseService implements Atualiza<FaseDto>{
             System.out.println("Fase salva com sucesso: " + fasesSalvas.toString());
         });
 
+        System.out.println("Atualização de fases finalizada...");
+        System.out.println("Quantidade de operações: " + contAtualizacoes.get());
 
         return contAtualizacoes.get();
     }
 
     @Override
     public List<FaseDto> consultaApi() {
+        System.out.println("Consultando fases na api...");
         String uri = baseUrl + "/stages";
         String nextPageToken = null;
         int quantity = 50;
@@ -103,6 +107,8 @@ public class AtualizaFaseService implements Atualiza<FaseDto>{
             nextPageToken = response != null ? response.getHeaders().getFirst("X-Moskit-Listing-Next-Page-Token") : null;
 
         } while (nextPageToken != null && !nextPageToken.isEmpty());
+
+        System.out.println("Finalizado consulta de fases da api...");
 
         return todasFases;
     }

@@ -46,6 +46,7 @@ public class AtualizaEmpresaService implements Atualiza<EmpresaDto>{
 
     @Override
     public int atualiza() {
+        System.out.println("Começando atualizações de empresas...");
         List<Empresa> empresasNovas = consultaApi().stream().map(EmpresaMapper::paraDomainDeDto).toList();
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
@@ -72,12 +73,15 @@ public class AtualizaEmpresaService implements Atualiza<EmpresaDto>{
             System.out.println("Empresa salva com sucesso: " + empresasSalvas.toString());
         });
 
+        System.out.println("Finalizado atualizações de empresas...");
+        System.out.println("Quantidade de operações: " + contAtualizacoes.get());
 
         return contAtualizacoes.get();
     }
 
     @Override
     public List<EmpresaDto> consultaApi() {
+        System.out.println("Consultando empresas na api...");
         String uri = baseUrl + "/companies";
         String nextPageToken = null;
         int quantity = 50;
@@ -103,6 +107,7 @@ public class AtualizaEmpresaService implements Atualiza<EmpresaDto>{
 
         } while (nextPageToken != null && !nextPageToken.isEmpty());
 
+        System.out.println("Finalizado consulta de empresas na api...");
         return todasEmpresas;
     }
 

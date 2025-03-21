@@ -21,7 +21,6 @@ public class NegocioDto {
     private StatusNegocio status;
     private FaseDto stage;
     private String dateCreated;
-    private String previsionCloseDate;
     private String closeDate;
     private List<CampoPersonalizadoDto> entityCustomFields;
     private Qualificacao qualificacao;

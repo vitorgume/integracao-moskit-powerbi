@@ -39,6 +39,7 @@ public class AtualizaFunilService implements Atualiza<FunilDto> {
 
     @Override
     public int atualiza() {
+        System.out.println("Começando atualizações de funis...");
         List<Funil> funisNovos = consultaApi().stream().map(FunilMapper::paraDomainDeDto).toList();
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
@@ -63,11 +64,14 @@ public class AtualizaFunilService implements Atualiza<FunilDto> {
         });
 
 
+        System.out.println("Finalizado atualizações de funis...");
+        System.out.println("Quantidade de operações: " + contAtualizacoes.get());
         return contAtualizacoes.get();
     }
 
     @Override
     public List<FunilDto> consultaApi() {
+        System.out.println("Consultando funis na api...");
         String uri = baseUrl + "/pipelines";
 
         List<FunilDto> funis = webClient.get()
@@ -77,6 +81,7 @@ public class AtualizaFunilService implements Atualiza<FunilDto> {
                 .bodyToMono(new ParameterizedTypeReference<List<FunilDto>>() {})
                 .block();
 
+        System.out.println("Finalizado consulta de funis da api...");
         return funis;
     }
 }

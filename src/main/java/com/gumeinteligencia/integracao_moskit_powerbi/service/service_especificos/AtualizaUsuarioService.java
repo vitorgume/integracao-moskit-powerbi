@@ -39,6 +39,7 @@ public class AtualizaUsuarioService implements Atualiza<UsuarioDto>{
 
     @Override
     public int atualiza() {
+        System.out.println("Começando atualizações de usuário...");
         List<Usuario> usuariosNovos = consultaApi().stream().map(UsuarioMapper::paraDomainDeDto).toList();
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
@@ -62,12 +63,14 @@ public class AtualizaUsuarioService implements Atualiza<UsuarioDto>{
             System.out.println("Usuario salvo com sucesso: " + usuarioSalvo);
         });
 
-
+        System.out.println("Finalizado atualizações de usuário...");
+        System.out.println("Quantidade de operações: " + contAtualizacoes.get());
         return contAtualizacoes.get();
     }
 
     @Override
     public List<UsuarioDto> consultaApi() {
+        System.out.println("Consultando usuários na api...");
         String uri = baseUrl + "/users";
 
         List<UsuarioDto> usuarios = webClient.get()
@@ -76,6 +79,8 @@ public class AtualizaUsuarioService implements Atualiza<UsuarioDto>{
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<UsuarioDto>>() {})
                 .block();
+
+        System.out.println("Finalizado consulta de usuários na api...");
 
         return usuarios;
     }

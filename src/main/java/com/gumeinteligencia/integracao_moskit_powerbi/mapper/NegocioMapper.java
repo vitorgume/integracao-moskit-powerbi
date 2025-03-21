@@ -16,7 +16,6 @@ public class NegocioMapper {
                 .responsible(UsuarioMapper.paraDomain(entity.getResponsible()))
                 .createdBy(UsuarioMapper.paraDomain(entity.getCreatedBy()))
                 .dateCreated(entity.getDateCreated())
-                .previsionCloseDate(entity.getPrevisionCloseDate())
                 .closeDate(entity.getCloseDate())
                 .qualificacao(entity.getQualificacao())
                 .build();
@@ -32,7 +31,6 @@ public class NegocioMapper {
                 .responsible(UsuarioMapper.paraEntity(domain.getResponsible()))
                 .createdBy(UsuarioMapper.paraEntity(domain.getCreatedBy()))
                 .dateCreated(domain.getDateCreated())
-                .previsionCloseDate(domain.getPrevisionCloseDate())
                 .closeDate(domain.getCloseDate())
                 .qualificacao(domain.getQualificacao())
                 .build();
@@ -48,14 +46,13 @@ public class NegocioMapper {
                 .responsible(UsuarioMapper.paraDomainDeDto(dto.getResponsible()))
                 .createdBy(UsuarioMapper.paraDomainDeDto(dto.getCreatedBy()))
                 .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
-                .previsionCloseDate(MapperData.trasnformaData(dto.getPrevisionCloseDate()))
                 .closeDate(MapperData.trasnformaData(dto.getCloseDate()))
                 .qualificacao(MapperEnum.organizaQualificacao(dto))
                 .build();
     }
 
     public static NegocioDto paraDto(Negocio domain) {
-        if(domain.getPrevisionCloseDate() == null) {
+        if(domain.getCloseDate() == null) {
             return NegocioDto.builder()
                     .id(domain.getId())
                     .name(domain.getName())
@@ -64,8 +61,7 @@ public class NegocioMapper {
                     .status(domain.getStatus())
                     .responsible(UsuarioMapper.paraDto(domain.getResponsible()))
                     .createdBy(UsuarioMapper.paraDto(domain.getCreatedBy()))
-                    .dateCreated(domain.getDateCreated().toString())
-                    .closeDate(domain.getCloseDate().toString())
+                    .dateCreated(MapperData.trasformaDataString(domain.getDateCreated()))
                     .qualificacao(domain.getQualificacao())
                     .build();
         } else {
@@ -77,9 +73,8 @@ public class NegocioMapper {
                     .status(domain.getStatus())
                     .responsible(UsuarioMapper.paraDto(domain.getResponsible()))
                     .createdBy(UsuarioMapper.paraDto(domain.getCreatedBy()))
-                    .dateCreated(domain.getDateCreated().toString())
-                    .previsionCloseDate(domain.getPrevisionCloseDate().toString())
-                    .closeDate(domain.getCloseDate().toString())
+                    .dateCreated(MapperData.trasformaDataString(domain.getDateCreated()))
+                    .closeDate(MapperData.trasformaDataString(domain.getCloseDate()))
                     .qualificacao(domain.getQualificacao())
                     .build();
         }
