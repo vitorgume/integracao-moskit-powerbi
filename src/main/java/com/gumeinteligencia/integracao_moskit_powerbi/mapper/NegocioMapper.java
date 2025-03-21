@@ -54,20 +54,38 @@ public class NegocioMapper {
                 .build();
     }
 
-//    public static NegocioDto paraDto(Negocio domain) {
-//        return NegocioDto.builder()
-//                .id(domain.getId())
-//                .name(domain.getName())
-//                .price(domain.getPrice())
-//                .stage(FaseMapper.paraDto(domain.getStage()))
-//                .status(domain.getStatus())
-//                .responsible(UsuarioMapper.paraDto(domain.getResponsible()))
-//                .createdBy(UsuarioMapper.paraDto(domain.getCreatedBy()))
-//                .dateCreated(domain.getDateCreated().toString())
-//                .previsionCloseDate(domain.getPrevisionCloseDate().toString())
-//                .closeDate(domain.getCloseDate().toString())
-//                .entityCustomFields()
-//    }
+    public static NegocioDto paraDto(Negocio domain) {
+        if(domain.getPrevisionCloseDate() == null) {
+            return NegocioDto.builder()
+                    .id(domain.getId())
+                    .name(domain.getName())
+                    .price(domain.getPrice())
+                    .stage(FaseMapper.paraDto(domain.getStage()))
+                    .status(domain.getStatus())
+                    .responsible(UsuarioMapper.paraDto(domain.getResponsible()))
+                    .createdBy(UsuarioMapper.paraDto(domain.getCreatedBy()))
+                    .dateCreated(domain.getDateCreated().toString())
+                    .closeDate(domain.getCloseDate().toString())
+                    .qualificacao(domain.getQualificacao())
+                    .build();
+        } else {
+            return NegocioDto.builder()
+                    .id(domain.getId())
+                    .name(domain.getName())
+                    .price(domain.getPrice())
+                    .stage(FaseMapper.paraDto(domain.getStage()))
+                    .status(domain.getStatus())
+                    .responsible(UsuarioMapper.paraDto(domain.getResponsible()))
+                    .createdBy(UsuarioMapper.paraDto(domain.getCreatedBy()))
+                    .dateCreated(domain.getDateCreated().toString())
+                    .previsionCloseDate(domain.getPrevisionCloseDate().toString())
+                    .closeDate(domain.getCloseDate().toString())
+                    .qualificacao(domain.getQualificacao())
+                    .build();
+        }
+
+
+    }
 
 
 

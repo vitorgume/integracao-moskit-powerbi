@@ -5,6 +5,7 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.TipoAtividade;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.AtividadeNegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.TipoAtividadeDto;
 
 import java.util.Arrays;
 
@@ -41,11 +42,11 @@ public class MapperEnum {
         }
     }
 
-    public TipoAtividade organizaTipoAtividade(AtividadeNegocioDto dto) {
-        if (dto.getType() == null) {
+    public static TipoAtividade organizaTipoAtividade(TipoAtividadeDto dto) {
+        if (dto.getId() == null) {
             return TipoAtividade.SEM_QUALIFICACAO;
         } else {
-            Integer codigo = dto.getType().getCodigo();
+            Integer codigo = dto.getId();
 
             TipoAtividade tipoAtividade;
 

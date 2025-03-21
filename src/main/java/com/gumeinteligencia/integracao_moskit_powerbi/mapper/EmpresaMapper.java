@@ -35,4 +35,14 @@ public class EmpresaMapper {
                 .createdBy(UsuarioMapper.paraDomainDeDto(dto.createdBy()))
                 .build();
     }
+
+    public static EmpresaDto paraDto(Empresa empresa) {
+        return EmpresaDto.builder()
+                .id(empresa.getId())
+                .cnpj(empresa.getCnpj())
+                .name(empresa.getName())
+                .responsible(UsuarioMapper.paraDto(empresa.getResponsible()))
+                .createdBy(UsuarioMapper.paraDto(empresa.getCreatedBy()))
+                .build();
+    }
 }

@@ -6,23 +6,6 @@ import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especifico
 
 public class AtividadeNegocioMapper {
 
-    /*
-     private Integer id;
-    private String title;
-    private Usuario createdBy;
-    private Usuario responsible;
-    private Usuario doneUser;
-    private LocalDate dateCreated;
-    private LocalDate dueDate;
-    private LocalDate doneDate;
-    private TipoAtividade type;
-    private Integer duration;
-    private Integer totalTries;
-    private List<Negocio> deals;
-    private List<Empresa> companies;
-     */
-
-
     public static AtividadeNegocio paraDomain(AtividadeNegocioEntity entity) {
         return AtividadeNegocio.builder()
                 .id(entity.getId())
@@ -69,7 +52,7 @@ public class AtividadeNegocioMapper {
                 .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
                 .dueDate(MapperData.trasnformaData(dto.getDueDate()))
                 .doneDate(MapperData.trasnformaData(dto.getDoneDate()))
-                .type(dto.getType())
+                .type(MapperEnum.organizaTipoAtividade(dto.getType()))
                 .duration(dto.getDuration())
                 .totalTries(dto.getTotalTries())
                 .deals(dto.getDeals().stream().map(NegocioMapper::paraDomainDeDto).toList())

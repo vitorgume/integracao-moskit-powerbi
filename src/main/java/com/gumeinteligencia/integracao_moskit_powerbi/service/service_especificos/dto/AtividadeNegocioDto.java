@@ -19,7 +19,7 @@ public class AtividadeNegocioDto {
     private String dateCreated;
     private String dueDate;
     private String doneDate;
-    private TipoAtividade type;
+    private TipoAtividadeDto type;
     private Integer duration;
     private Integer totalTries;
     private List<NegocioDto> deals;
