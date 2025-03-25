@@ -1,6 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.controller;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.service.AtualizaService;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.AtualizaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

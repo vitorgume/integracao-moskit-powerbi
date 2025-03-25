@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exception.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.MovimentacaoMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.MovimentacaoRepository;

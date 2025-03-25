@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api.exceptions.DataProviderApiException;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.AtividadeNegocioDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.AtividadeNegocioDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -48,10 +48,10 @@ public class AtividadeApiDataProvider {
         );
 
         var response = webClient.post()
-                .uri(uri) //
+                .uri(uri)
                 .header("apikey", apiKey)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBody) // Enviando o corpo JSON
+                .bodyValue(requestBody)
                 .retrieve()
                 .toEntityList(AtividadeNegocioDto.class)
                 .block();

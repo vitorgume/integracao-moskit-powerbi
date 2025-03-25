@@ -2,10 +2,9 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Qualificacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.TipoAtividade;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.AtividadeNegocioDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.CampoPersonalizadoDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.TipoAtividadeDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.CampoPersonalizadoDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.NegocioDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.TipoAtividadeDto;
 
 import java.util.Arrays;
 

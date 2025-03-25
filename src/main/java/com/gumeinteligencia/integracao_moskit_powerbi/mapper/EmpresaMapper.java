@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.EmpresaEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.EmpresaDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.EmpresaDto;
 
 public class EmpresaMapper {
 

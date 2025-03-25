@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.FunilEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FunilDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.FunilDto;
 
 public class FunilMapper {
 

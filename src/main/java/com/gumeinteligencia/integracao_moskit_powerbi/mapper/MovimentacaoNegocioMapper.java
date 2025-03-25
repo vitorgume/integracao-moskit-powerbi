@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.MovimentacaoNegociosDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.MovimentacaoNegociosDto;
 
 public class MovimentacaoNegocioMapper {
 

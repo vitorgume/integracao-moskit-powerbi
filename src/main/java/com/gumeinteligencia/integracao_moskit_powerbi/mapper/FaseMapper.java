@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.FaseEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.FaseDto;
 
 public class FaseMapper {
 

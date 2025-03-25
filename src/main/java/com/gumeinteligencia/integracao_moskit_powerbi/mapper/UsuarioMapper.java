@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.UsuarioEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.UsuarioDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.UsuarioDto;
 
 public class UsuarioMapper {
 

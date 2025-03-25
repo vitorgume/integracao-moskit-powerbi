@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exception.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.UsuarioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.UsuarioEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.UsuarioRepository;

@@ -1,0 +1,12 @@
+package com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd;
+
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UsuarioGateway {
+    Optional<Usuario> consultarPorId(Integer id);
+    List<Usuario> listar();
+    Usuario salvar(Usuario usuarioNovo);
+}
