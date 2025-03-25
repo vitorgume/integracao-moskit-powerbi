@@ -1,4 +1,4 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Qualificacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.StatusNegocio;

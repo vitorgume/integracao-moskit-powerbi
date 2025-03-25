@@ -1,8 +1,7 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.EmpresaEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.EmpresaDto;
 
 public class EmpresaMapper {
 
@@ -23,26 +22,6 @@ public class EmpresaMapper {
                 .name(domain.getName())
                 .responsible(UsuarioMapper.paraEntity(domain.getResponsible()))
                 .createdBy(UsuarioMapper.paraEntity(domain.getCreatedBy()))
-                .build();
-    }
-
-    public static Empresa paraDomainDeDto(EmpresaDto dto) {
-        return Empresa.builder()
-                .id(dto.id())
-                .cnpj(dto.cnpj())
-                .name(dto.name())
-                .responsible(UsuarioMapper.paraDomainDeDto(dto.responsible()))
-                .createdBy(UsuarioMapper.paraDomainDeDto(dto.createdBy()))
-                .build();
-    }
-
-    public static EmpresaDto paraDto(Empresa empresa) {
-        return EmpresaDto.builder()
-                .id(empresa.getId())
-                .cnpj(empresa.getCnpj())
-                .name(empresa.getName())
-                .responsible(UsuarioMapper.paraDto(empresa.getResponsible()))
-                .createdBy(UsuarioMapper.paraDto(empresa.getCreatedBy()))
                 .build();
     }
 }

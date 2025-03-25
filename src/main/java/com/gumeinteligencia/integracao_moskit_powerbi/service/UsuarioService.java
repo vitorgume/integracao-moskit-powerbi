@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.UsuarioDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.UsuarioDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

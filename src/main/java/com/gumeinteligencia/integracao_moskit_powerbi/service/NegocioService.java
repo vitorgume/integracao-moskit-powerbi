@@ -1,16 +1,14 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.NegocioDataProvider;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.NegocioEntity;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.NegocioDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.NegocioEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.NegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FunilDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.negocio.AtualizaNegocioService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

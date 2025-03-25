@@ -2,13 +2,11 @@ package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especific
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.FaseDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.FaseDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FaseMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.FunilService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.NegocioDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 

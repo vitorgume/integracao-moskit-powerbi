@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.UsuarioDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.UsuarioDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.UsuarioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.UsuarioDto;
 import org.springframework.beans.factory.annotation.Value;

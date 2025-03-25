@@ -1,4 +1,4 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.TipoAtividade;
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class AtividadeNegocioEntity {
+public class AtividadeEntity {
 
     @Id
     @Column(name = "id_atividade")

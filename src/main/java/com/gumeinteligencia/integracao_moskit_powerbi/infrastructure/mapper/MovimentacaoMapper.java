@@ -1,10 +1,9 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.MovimentacaoNegociosDto;
 
-public class MovimentacaoNegocioMapper {
+public class MovimentacaoMapper {
 
     public static MovimentacaoNegocio paraDomain(MovimentacaoEntity entity) {
 
@@ -49,29 +48,6 @@ public class MovimentacaoNegocioMapper {
                     .primeiraNavegacao(domain.getPrimeiraNavegacao())
                     .build();
         }
-    }
-
-    public static MovimentacaoNegocio paraDomainDeDto(MovimentacaoNegociosDto dto) {
-        if(dto.getOldStage() == null) {
-            return MovimentacaoNegocio.builder()
-                    .id(dto.getId())
-                    .negocio(NegocioMapper.paraDomainDeDto(dto.getDeal()))
-                    .dataCriacao(MapperData.trasnformaData(dto.getDateCreated()))
-                    .faseAtual(FaseMapper.paraDomainDeDto(dto.getCurrentStage()))
-                    .primeiraNavegacao(dto.getFirstNavigation())
-                    .build();
-        } else {
-            return MovimentacaoNegocio.builder()
-                    .id(dto.getId())
-                    .negocio(NegocioMapper.paraDomainDeDto(dto.getDeal()))
-                    .dataCriacao(MapperData.trasnformaData(dto.getDateCreated()))
-                    .faseAntiga(FaseMapper.paraDomainDeDto(dto.getOldStage()))
-                    .faseAtual(FaseMapper.paraDomainDeDto(dto.getCurrentStage()))
-                    .primeiraNavegacao(dto.getFirstNavigation())
-                    .build();
-        }
-
-
     }
 
 }

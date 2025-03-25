@@ -4,7 +4,7 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.NegocioDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.NegocioDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.MapperData;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.NegocioMapper;

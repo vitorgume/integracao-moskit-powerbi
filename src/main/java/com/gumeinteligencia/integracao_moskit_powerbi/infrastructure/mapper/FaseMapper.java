@@ -1,8 +1,7 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.FaseEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FaseDto;
 
 public class FaseMapper {
 
@@ -19,22 +18,6 @@ public class FaseMapper {
                 .id(domain.getId())
                 .name(domain.getName())
                 .pipeline(FunilMapper.paraEntity(domain.getPipeline()))
-                .build();
-    }
-
-    public static Fase paraDomainDeDto(FaseDto dto) {
-        return Fase.builder()
-                .id(dto.getId())
-                .name(dto.getName())
-                .pipeline(FunilMapper.paraDomainDeDto(dto.getPipeline()))
-                .build();
-    }
-
-    public static FaseDto paraDto(Fase domain) {
-        return FaseDto.builder()
-                .id(domain.getId())
-                .name(domain.getName())
-                .pipeline(FunilMapper.paraDto(domain.getPipeline()))
                 .build();
     }
 }

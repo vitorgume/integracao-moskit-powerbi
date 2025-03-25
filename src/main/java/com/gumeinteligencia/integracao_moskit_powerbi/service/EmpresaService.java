@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.EmpresaDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.EmpresaDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.EmpresaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

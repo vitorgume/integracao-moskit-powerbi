@@ -2,12 +2,11 @@ package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especific
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.EmpresaDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.EmpresaDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.EmpresaMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.UsuarioService;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.EmpresaDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 

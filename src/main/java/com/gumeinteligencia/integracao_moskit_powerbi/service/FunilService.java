@@ -1,8 +1,8 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.FunilDataProvider;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.FunilEntity;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.FunilDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.FunilEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

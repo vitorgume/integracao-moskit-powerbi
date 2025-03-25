@@ -1,4 +1,4 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class MovimentacaoNegocioEntity {
+public class MovimentacaoEntity {
 
     @Id
     @Column(name = "id_movitacoes_negocios")

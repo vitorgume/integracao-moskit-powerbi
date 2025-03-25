@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.FunilDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.FunilDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.FunilDto;
 import org.springframework.beans.factory.annotation.Value;

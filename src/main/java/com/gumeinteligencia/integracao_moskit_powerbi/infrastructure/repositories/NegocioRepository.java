@@ -1,6 +1,6 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repository;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity.NegocioEntity;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.NegocioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

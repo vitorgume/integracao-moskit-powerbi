@@ -1,10 +1,8 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.entity;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities;
 
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.UUID;
 
 @Entity(name = "Usuario")
 @Table(name = "usuarios")

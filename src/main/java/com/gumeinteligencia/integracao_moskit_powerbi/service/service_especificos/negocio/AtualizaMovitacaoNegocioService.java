@@ -4,7 +4,7 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.MovimentacaoNegocioDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.MovimentacaoDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FaseMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.MovimentacaoNegocioMapper;
@@ -33,7 +33,7 @@ public class AtualizaMovitacaoNegocioService {
 
     private final WebClient webClient;
 
-    private final MovimentacaoNegocioDataProvider dataProvider;
+    private final MovimentacaoDataProvider dataProvider;
 
     private final UsuarioService usuarioService;
 
@@ -49,7 +49,7 @@ public class AtualizaMovitacaoNegocioService {
             @Value("${moskit.api.key}") String apiKey,
             @Value("${moskit.api.base-url}") String baseUrl,
             WebClient webClient,
-            MovimentacaoNegocioDataProvider dataProvider,
+            MovimentacaoDataProvider dataProvider,
             UsuarioService usuarioService,
             FaseService faseService,
             NegocioService negocioService,

@@ -1,7 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.service;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.FaseDataProvider;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd.FaseDataProvider;
 import com.gumeinteligencia.integracao_moskit_powerbi.mapper.FaseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

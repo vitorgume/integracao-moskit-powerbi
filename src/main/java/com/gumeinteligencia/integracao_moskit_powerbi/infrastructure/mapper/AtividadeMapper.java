@@ -1,10 +1,9 @@
-package com.gumeinteligencia.integracao_moskit_powerbi.mapper;
+package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.AtividadeNegocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.AtividadeEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.service.service_especificos.dto.AtividadeNegocioDto;
 
-public class AtividadeNegocioMapper {
+public class AtividadeMapper {
 
     public static AtividadeNegocio paraDomain(AtividadeEntity entity) {
         return AtividadeNegocio.builder()
@@ -39,24 +38,6 @@ public class AtividadeNegocioMapper {
                 .totalTries(domain.getTotalTries())
                 .deals(domain.getDeals().stream().map(NegocioMapper::paraEntity).toList())
                 .companies(domain.getCompanies().stream().map(EmpresaMapper::paraEntity).toList())
-                .build();
-    }
-
-    public static AtividadeNegocio paraDomainDeDto(AtividadeNegocioDto dto) {
-        return AtividadeNegocio.builder()
-                .id(dto.getId())
-                .title(dto.getTitle())
-                .createdBy(UsuarioMapper.paraDomainDeDto(dto.getCreatedBy()))
-                .responsible(UsuarioMapper.paraDomainDeDto(dto.getResponsible()))
-                .doneUser(UsuarioMapper.paraDomainDeDto(dto.getDoneUser()))
-                .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
-                .dueDate(MapperData.trasnformaData(dto.getDueDate()))
-                .doneDate(MapperData.trasnformaData(dto.getDoneDate()))
-                .type(MapperEnum.organizaTipoAtividade(dto.getType()))
-                .duration(dto.getDuration())
-                .totalTries(dto.getTotalTries())
-                .deals(dto.getDeals().stream().map(NegocioMapper::paraDomainDeDto).toList())
-                .companies(dto.getCompanies().stream().map(EmpresaMapper::paraDomainDeDto).toList())
                 .build();
     }
 }
