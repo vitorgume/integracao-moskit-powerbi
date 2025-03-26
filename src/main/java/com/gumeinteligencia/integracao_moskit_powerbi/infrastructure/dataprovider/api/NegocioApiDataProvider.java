@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.NegocioDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.NegocioGatewayApi;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api.exceptions.DataProviderApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class NegocioApiDataProvider {
+public class NegocioApiDataProvider implements NegocioGatewayApi {
 
     private final WebClient webClient;
 
@@ -34,6 +35,7 @@ public class NegocioApiDataProvider {
         this.baseUrl = baseUrl;
     }
 
+    @Override
     public List<NegocioDto> consultaNegocios() {
         log.info("Consultando negócios na api...");
         String uri = baseUrl + "/deals/search";
@@ -78,7 +80,8 @@ public class NegocioApiDataProvider {
         return todosNegocios;
     }
 
-    public NegocioDto consultaPorId(Integer id) {
+    @Override
+    public NegocioDto consultarPorId(Integer id) {
         log.info("Consultando negócio por id na api...");
         String uri = baseUrl + "/deals/" + id;
 

@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.AtividadeNegocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.AtividadeGateway;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Atividade;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.AtividadeMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.AtividadeEntity;
@@ -14,14 +15,14 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AtividadeDataProvider {
+public class AtividadeDataProvider implements AtividadeGateway {
 
     private final AtividadesRepository repository;
     private final String MENSAGEM_ERRO_LISTAGEM_ATIVIDADE = "Erro ao listar atividades.";
     private final String MENSAGEM_ERRO_SALVAR_ATIVIDADE = "Erro ao salvar atividade.";
 
-
-    public List<AtividadeNegocio> listar() {
+    @Override
+    public List<Atividade> listar() {
         List<AtividadeEntity> atividadeEntityList;
 
         try {
@@ -34,7 +35,8 @@ public class AtividadeDataProvider {
         return atividadeEntityList.stream().map(AtividadeMapper::paraDomain).toList();
     }
 
-    public AtividadeNegocio salvar(AtividadeNegocio atividade) {
+    @Override
+    public Atividade salvar(Atividade atividade) {
         AtividadeEntity atividadeSalva;
 
         try {

@@ -1,5 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.EmpresaGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.EmpresaMapper;
@@ -15,14 +16,15 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class EmpresaDataProvider {
+public class EmpresaDataProvider implements EmpresaGateway {
 
     private final EmpresaRepository repository;
     private final String MENSAGEM_ERRO_LISTAGEM_EMPRESAS = "Erro ao listar empresas.";
     private final String MENSAGEM_ERRO_SALVAR_EMPRESA = "Erro ao salvar empresa.";
     private final String MENSAGEM_ERRO_CONSULTAR_EMPRESA_POR_ID = "Erro ao consultar empresa pelo id.";
 
-    public List<Empresa> listarEmpresas() {
+    @Override
+    public List<Empresa> listar() {
         List<EmpresaEntity> empresaEntities;
 
         try {
@@ -35,6 +37,7 @@ public class EmpresaDataProvider {
         return empresaEntities.stream().map(EmpresaMapper::paraDomain).toList();
     }
 
+    @Override
     public Empresa salvar(Empresa empresa) {
         EmpresaEntity empresaSalva;
 
@@ -48,6 +51,7 @@ public class EmpresaDataProvider {
         return EmpresaMapper.paraDomain(empresaSalva);
     }
 
+    @Override
     public Optional<Empresa> consultarPorId(Integer id) {
         Optional<EmpresaEntity> empresa;
 

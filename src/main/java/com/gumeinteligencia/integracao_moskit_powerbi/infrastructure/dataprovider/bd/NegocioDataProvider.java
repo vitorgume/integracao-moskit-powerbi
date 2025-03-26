@@ -1,5 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.NegocioMapper;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class NegocioDataProvider {
+public class NegocioDataProvider implements NegocioGateway {
 
     private final NegocioRepository repository;
     private final String MENSAGEM_ERRO_LISTAR_NEGOCIOS = "Erro ao listar negócios.";
@@ -23,7 +24,8 @@ public class NegocioDataProvider {
     private final String MENSAGEM_ERRO_CONSULTAR_NEGOCIO_POR_ID = "Erro ao consultar negócio por id.";
 
 
-    public List<Negocio> listarNegocios() {
+    @Override
+    public List<Negocio> listar() {
         List<NegocioEntity> negociosEntities;
 
         try {
@@ -36,6 +38,7 @@ public class NegocioDataProvider {
         return negociosEntities.stream().map(NegocioMapper::paraDomain).toList();
     }
 
+    @Override
     public Negocio salvar(Negocio negocio) {
         NegocioEntity negocioSalvo;
 

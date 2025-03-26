@@ -1,5 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.UsuarioGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.UsuarioMapper;
@@ -15,14 +16,15 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class UsuarioDataProvider {
+public class UsuarioDataProvider implements UsuarioGateway {
 
     private final UsuarioRepository repository;
     private final String MENSAGEM_ERRO_LISTAGEM_USUARIOS = "Erro ao listar usuários.";
     private final String MENSAGEM_ERRO_SALVAR_USUARIO = "Erro ao salvar usuário.";
     private final String MENSAGEM_ERRO_CONSULTAR_USUARIO_POR_ID = "Erro ao consultar usuário por id.";
 
-    public List<Usuario> listarUsuarios() {
+    @Override
+    public List<Usuario> listar() {
         List<UsuarioEntity> usuarioEntities;
 
         try {
@@ -35,6 +37,7 @@ public class UsuarioDataProvider {
         return usuarioEntities.stream().map(UsuarioMapper::paraDomain).toList();
     }
 
+    @Override
     public Usuario salvar(Usuario usuario) {
         UsuarioEntity usuarioSalvo;
 

@@ -1,7 +1,8 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.AtividadeGatewayApi;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api.exceptions.DataProviderApiException;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.AtividadeNegocioDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.AtividadeDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class AtividadeApiDataProvider {
+public class AtividadeApiDataProvider implements AtividadeGatewayApi {
 
     private final WebClient webClient;
 
@@ -34,7 +35,8 @@ public class AtividadeApiDataProvider {
     }
 
 
-    public List<AtividadeNegocioDto> consultaNegocios() {
+    @Override
+    public List<AtividadeDto> consultaAtividades() {
         log.info("Consultando atividades na API...");
 
         String uri = baseUrl + "/activities/search";
@@ -53,7 +55,7 @@ public class AtividadeApiDataProvider {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
                 .retrieve()
-                .toEntityList(AtividadeNegocioDto.class)
+                .toEntityList(AtividadeDto.class)
                 .block();
 
         if(response == null || response.getBody() == null) {

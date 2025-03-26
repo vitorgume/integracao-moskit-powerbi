@@ -1,5 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.FaseGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.FaseMapper;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class FaseDataProvider {
+public class FaseDataProvider implements FaseGateway {
 
     private final FaseRepository repository;
     private final String MENSAGEM_ERRO_LISTAR_FASES = "Erro ao listar fases.";
@@ -23,7 +24,8 @@ public class FaseDataProvider {
     private final String MENSAGEM_ERRO_CONSULTAR_FASE_POR_ID = "Erro ao consultar fase por seu id.";
 
 
-    public List<Fase> listarFases() {
+    @Override
+    public List<Fase> listar() {
         List<FaseEntity> fasesEntities;
 
         try {
@@ -36,6 +38,7 @@ public class FaseDataProvider {
         return fasesEntities.stream().map(FaseMapper::paraDomain).toList();
     }
 
+    @Override
     public Fase salvar(Fase fase) {
         FaseEntity faseSalva;
 

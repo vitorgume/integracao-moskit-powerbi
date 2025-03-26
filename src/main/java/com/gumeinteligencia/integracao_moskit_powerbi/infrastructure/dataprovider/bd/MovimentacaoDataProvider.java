@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.MovimentacaoGateway;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Movimentacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.MovimentacaoMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoEntity;
@@ -14,13 +15,14 @@ import java.util.List;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class MovimentacaoDataProvider {
+public class MovimentacaoDataProvider implements MovimentacaoGateway {
 
     private final MovimentacaoRepository repository;
     private final String MENSAGEM_ERRO_LISTAR_MOVIMENTACOES = "Erro ao listar movimentações.";
     private final String MENSAGEM_ERRO_SALVAR_MOVIMENTACAO = "Erro ao salvar movimentação";
 
-    public List<MovimentacaoNegocio> listar() {
+    @Override
+    public List<Movimentacao> listar() {
         List<MovimentacaoEntity> movimentacoesNegociosEntities;
 
         try {
@@ -33,7 +35,8 @@ public class MovimentacaoDataProvider {
         return movimentacoesNegociosEntities.stream().map(MovimentacaoMapper::paraDomain).toList();
     }
 
-    public MovimentacaoNegocio salvar(MovimentacaoNegocio movimentacao) {
+    @Override
+    public Movimentacao salvar(Movimentacao movimentacao) {
         MovimentacaoEntity movimentacaoEntity;
 
         try {

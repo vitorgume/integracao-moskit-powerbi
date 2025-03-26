@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.EmpresaDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.EmpresaGatewayApi;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.EmpresaDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class EmpresaApiDataProvider {
+public class EmpresaApiDataProvider implements EmpresaGatewayApi {
 
     private final WebClient webClient;
 
@@ -33,7 +34,8 @@ public class EmpresaApiDataProvider {
         this.baseUrl = baseUrl;
     }
 
-    public List<EmpresaDto> consultarEmpresas() {
+    @Override
+    public List<EmpresaDto> consultaEmpresas() {
         log.info("Consultando empresas na api...");
         String uri = baseUrl + "/companies/search";
         String nextPageToken = null;

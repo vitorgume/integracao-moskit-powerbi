@@ -1,6 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.EmpresaDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.EmpresaDto;
 
 import java.util.List;
 

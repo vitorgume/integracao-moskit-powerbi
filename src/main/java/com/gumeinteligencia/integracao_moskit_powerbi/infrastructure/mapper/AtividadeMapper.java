@@ -1,12 +1,12 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.AtividadeNegocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Atividade;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.AtividadeEntity;
 
 public class AtividadeMapper {
 
-    public static AtividadeNegocio paraDomain(AtividadeEntity entity) {
-        return AtividadeNegocio.builder()
+    public static Atividade paraDomain(AtividadeEntity entity) {
+        return Atividade.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .createdBy(UsuarioMapper.paraDomain(entity.getCreatedBy()))
@@ -23,7 +23,7 @@ public class AtividadeMapper {
                 .build();
     }
 
-    public static AtividadeEntity paraEntity(AtividadeNegocio domain) {
+    public static AtividadeEntity paraEntity(Atividade domain) {
         return AtividadeEntity.builder()
                 .id(domain.getId())
                 .title(domain.getTitle())

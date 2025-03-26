@@ -1,5 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.bd;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.FunilGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.FunilMapper;
@@ -15,14 +16,15 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class FunilDataProvider {
+public class FunilDataProvider implements FunilGateway {
 
     private final FunilRepository repository;
     private final String MENSAGEM_ERRO_LISTAGEM_FUNIS = "Erro ao listar funis.";
     private final String MENSAGEM_ERRO_SALVAR_FUNIL = "Erro ao salvar funil.";
     private final String MENSAGEM_ERRO_CONSULTAR_FUNIL_POR_ID = "Erro ao consultar funil por id.";
 
-    public List<Funil> listarFunis() {
+    @Override
+    public List<Funil> listar() {
         List<FunilEntity> funisEntities;
 
         try {
@@ -35,6 +37,7 @@ public class FunilDataProvider {
         return funisEntities.stream().map(FunilMapper::paraDomain).toList();
     }
 
+    @Override
     public Funil salvar(Funil funil) {
         FunilEntity funilSalvo;
 
@@ -48,6 +51,7 @@ public class FunilDataProvider {
         return FunilMapper.paraDomain(funilSalvo);
     }
 
+    @Override
     public Optional<Funil> consultarPorId(Integer id) {
         Optional<FunilEntity> funilEntity;
 

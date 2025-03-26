@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.UsuarioDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.UsuarioGatewayApi;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.UsuarioDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class UsuarioApiDataProvider {
+public class UsuarioApiDataProvider implements UsuarioGatewayApi {
 
     private final WebClient webClient;
 
@@ -31,6 +32,7 @@ public class UsuarioApiDataProvider {
         this.baseUrl = baseUrl;
     }
 
+    @Override
     public List<UsuarioDto> consultarUsuarios() {
         log.info("Consultando usuários na api...");
         String uri = baseUrl + "/users";

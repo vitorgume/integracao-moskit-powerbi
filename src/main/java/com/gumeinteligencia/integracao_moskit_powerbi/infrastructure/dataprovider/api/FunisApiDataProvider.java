@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.FunilDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.FunilGatewayApi;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.FunilDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class FunisApiDataProvider {
+public class FunisApiDataProvider implements FunilGatewayApi {
 
     private final WebClient webClient;
 
@@ -31,6 +32,7 @@ public class FunisApiDataProvider {
         this.baseUrl = baseUrl;
     }
 
+    @Override
     public List<FunilDto> consultarFunis() {
         log.info("Consultando funis na api...");
         String uri = baseUrl + "/pipelines";

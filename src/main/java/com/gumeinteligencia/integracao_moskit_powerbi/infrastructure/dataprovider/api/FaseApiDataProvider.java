@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.api;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.application.service.dto.FaseDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.FaseGatewayApi;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.FaseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class FaseApiDataProvider {
+public class FaseApiDataProvider implements FaseGatewayApi {
 
     private final WebClient webClient;
 
@@ -31,6 +32,7 @@ public class FaseApiDataProvider {
         this.baseUrl = baseUrl;
     }
 
+    @Override
     public List<FaseDto> consultaFases() {
         log.info("Consultando fases na api...");
         String uri = baseUrl + "/stages";

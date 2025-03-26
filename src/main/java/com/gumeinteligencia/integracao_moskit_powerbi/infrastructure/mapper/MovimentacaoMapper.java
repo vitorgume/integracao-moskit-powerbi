@@ -1,14 +1,14 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.MovimentacaoNegocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Movimentacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoEntity;
 
 public class MovimentacaoMapper {
 
-    public static MovimentacaoNegocio paraDomain(MovimentacaoEntity entity) {
+    public static Movimentacao paraDomain(MovimentacaoEntity entity) {
 
         if(entity.getFaseAntiga() == null) {
-            return MovimentacaoNegocio.builder()
+            return Movimentacao.builder()
                     .id(entity.getId())
                     .negocio(NegocioMapper.paraDomain(entity.getNegocio()))
                     .dataCriacao(entity.getDataCriacao())
@@ -16,7 +16,7 @@ public class MovimentacaoMapper {
                     .primeiraNavegacao(entity.getPrimeiraNavegacao())
                     .build();
         } else {
-            return MovimentacaoNegocio.builder()
+            return Movimentacao.builder()
                     .id(entity.getId())
                     .negocio(NegocioMapper.paraDomain(entity.getNegocio()))
                     .dataCriacao(entity.getDataCriacao())
@@ -28,7 +28,7 @@ public class MovimentacaoMapper {
 
     }
 
-    public static MovimentacaoEntity paraEntity(MovimentacaoNegocio domain) {
+    public static MovimentacaoEntity paraEntity(Movimentacao domain) {
 
         if(domain.getFaseAntiga() == null) {
             return MovimentacaoEntity.builder()
