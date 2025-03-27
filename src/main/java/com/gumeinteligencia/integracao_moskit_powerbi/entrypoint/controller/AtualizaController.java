@@ -1,6 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.entrypoint.controller;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.AtualizaService;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.AtualizaUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AtualizaController {
 
-    private final AtualizaService service;
+    private final AtualizaUseCase service;
 
     @PostMapping
     public ResponseEntity<String> atualiza() {

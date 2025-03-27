@@ -77,8 +77,15 @@ public class MovimentacaoUseCase {
                 throw new NenhumaMovimentacaoEncontradaException();
             }
 
+            List<Movimentacao> movimentacaosCorretas = movimentacoes
+                    .stream()
+                    .filter(movimentacao ->
+                            !(movimentacao.getFaseAtual().getId() == 446947 &&
+                            movimentacao.getFaseAntiga().getId() == 446689))
+                    .toList();
 
-            List<Movimentacao> movimentacoesCadastrar = movimentacoes.stream()
+
+            List<Movimentacao> movimentacoesCadastrar = movimentacaosCorretas.stream()
                     .filter(movimentacaoNova ->
                             movimentacaoList.stream().noneMatch(movimentacaoAntiga ->
                                     movimentacaoAntiga.getId().equals(movimentacaoNova.getId())
