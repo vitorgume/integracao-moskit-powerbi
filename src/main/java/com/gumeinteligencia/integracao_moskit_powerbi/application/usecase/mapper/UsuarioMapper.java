@@ -2,10 +2,12 @@ package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mappe
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.UsuarioDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UsuarioMapper {
 
-    public static Usuario paraDomain(UsuarioDto dto) {
+    public Usuario paraDomain(UsuarioDto dto) {
         return Usuario.builder()
                 .id(dto.id())
                 .name(dto.name())
@@ -14,7 +16,7 @@ public class UsuarioMapper {
                 .build();
     }
 
-    public static UsuarioDto paraDto(Usuario domain) {
+    public UsuarioDto paraDto(Usuario domain) {
         return UsuarioDto.builder()
                 .id(domain.getId())
                 .name(domain.getName())

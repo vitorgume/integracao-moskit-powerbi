@@ -48,4 +48,7 @@ public class NegocioEntity {
 
     @Enumerated(EnumType.STRING)
     private Qualificacao qualificacao;
+
+    @Column(name = "motivo_perda")
+    private String motivoPerda;
 }

@@ -20,6 +20,7 @@ public class NegocioDto {
     private BigDecimal price;
     private StatusNegocio status;
     private FaseDto stage;
+    private MotivoPerdaDto lostReason;
     private String dateCreated;
     private String closeDate;
     private List<CampoPersonalizadoDto> entityCustomFields;

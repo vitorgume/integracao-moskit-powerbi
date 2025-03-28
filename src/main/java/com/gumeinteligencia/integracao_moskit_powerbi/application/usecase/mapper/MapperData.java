@@ -1,10 +1,13 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper;
 
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
+@Component
 public class MapperData {
     public static LocalDate trasnformaData(String data) {
         if (data != null) {

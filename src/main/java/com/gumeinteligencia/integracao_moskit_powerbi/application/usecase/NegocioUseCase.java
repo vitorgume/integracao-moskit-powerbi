@@ -30,6 +30,8 @@ public class NegocioUseCase {
     private final FaseUseCase faseUseCase;
     private final FunilUseCase funilUseCase;
     private final UsuarioUseCase usuarioUseCase;
+    private final NegocioMapper mapper;
+    private final FunilMapper funilMapper;
 
     public List<Negocio> listar() {
         log.info("Listando negócios...");
@@ -58,35 +60,39 @@ public class NegocioUseCase {
 
     public int atualiza() {
         log.info("Começando atualização de negócios...");
-        List<NegocioDto> negociosDtos = gatewayApi.consultaNegocios();
-
-        List<Negocio> negociosNovos = negociosDtos.stream()
-                .peek(negocio -> {
-                    List<CampoPersonalizadoDto> camposPersonalizado = negocio.getEntityCustomFields()
-                            .stream()
-                            .filter(campoPersonalizado -> campoPersonalizado.id().equals("CF_8P5q4Vi6ioJ7lmRJ"))
-                            .toList();
-
-                    negocio.setEntityCustomFields(camposPersonalizado);
-                })
-                .toList()
+        List<Negocio> negociosNovos = gatewayApi.consultaNegocios()
                 .stream()
                 .map(this::buscaDadosNecessarios)
-                .map(NegocioMapper::paraDomain)
+                .map(mapper::paraDomain)
                 .toList();
+
+//        List<Negocio> negociosNovos = negociosDtos.stream()
+//                .peek(negocio -> {
+//                    List<CampoPersonalizadoDto> camposPersonalizado = negocio.getEntityCustomFields()
+//                            .stream()
+//                            .filter(campoPersonalizado -> campoPersonalizado.id().equals("CF_8P5q4Vi6ioJ7lmRJ"))
+//                            .toList();
+//
+//                    negocio.setEntityCustomFields(camposPersonalizado);
+//                })
+//                .toList()
+//                .stream()
+//                .map(this::buscaDadosNecessarios)
+//                .map(mapper::paraDomain)
+//                .toList();
 
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
-        if (negociosNovos.isEmpty()) {
-            throw new NenhumNegocioEncontradoException();
-        }
+//        if (negociosNovos.isEmpty()) {
+//            throw new NenhumNegocioEncontradoException();
+//        }
 
         List<Negocio> negociosAntigos = gateway.listar();
 
         List<Negocio> negociosCadastrar = negociosNovos.stream()
                 .filter(negocioNovo ->
                         negociosAntigos.stream().noneMatch(negocioAntigo ->
-                                negocioAntigo.getName().equals(negocioNovo.getName())
+                                negocioAntigo.getId().equals(negocioNovo.getId())
                         )
                 )
                 .toList();
@@ -122,7 +128,7 @@ public class NegocioUseCase {
     private NegocioDto buscaDadosNecessarios(NegocioDto negocio) {
         Fase fase = faseUseCase.consultarPorId(negocio.getStage().getId());
         Funil funilStage = funilUseCase.consultarPorId(fase.getPipeline().getId());
-        negocio.getStage().setPipeline(FunilMapper.paraDto(funilStage));
+        negocio.getStage().setPipeline(funilMapper.paraDto(funilStage));
         return negocio;
     }
 }

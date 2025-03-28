@@ -22,4 +22,5 @@ public class Negocio {
     private LocalDate dateCreated;
     private LocalDate closeDate;
     private Qualificacao qualificacao;
+    private String motivoPerda;
 }

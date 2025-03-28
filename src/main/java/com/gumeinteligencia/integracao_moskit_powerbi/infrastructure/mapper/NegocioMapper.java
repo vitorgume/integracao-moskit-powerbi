@@ -17,6 +17,7 @@ public class NegocioMapper {
                 .dateCreated(entity.getDateCreated())
                 .closeDate(entity.getCloseDate())
                 .qualificacao(entity.getQualificacao())
+                .motivoPerda(entity.getMotivoPerda())
                 .build();
     }
 
@@ -32,6 +33,7 @@ public class NegocioMapper {
                 .dateCreated(domain.getDateCreated())
                 .closeDate(domain.getCloseDate())
                 .qualificacao(domain.getQualificacao())
+                .motivoPerda(domain.getMotivoPerda())
                 .build();
     }
 }

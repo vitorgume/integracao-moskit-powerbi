@@ -21,6 +21,7 @@ public class FunilUseCase {
 
     private final FunilGateway gateway;
     private final FunilGatewayApi gatewayApi;
+    private final FunilMapper funilMapper;
 
     public Funil consultarPorId(Integer id) {
         log.info("Consultando funil pelo id. Id: {}", id);
@@ -43,7 +44,7 @@ public class FunilUseCase {
 
         List<Funil> funisNovos = gatewayApi.consultarFunis()
                 .stream()
-                .map(FunilMapper::paraDomain)
+                .map(funilMapper::paraDomain)
                 .toList();
 
         AtomicInteger contAtualizacoes = new AtomicInteger();
@@ -57,7 +58,7 @@ public class FunilUseCase {
         List<Funil> funisCadastrar = funisNovos.stream()
                 .filter(funilNovo ->
                         funisAntigos.stream().noneMatch(funilAntigo ->
-                                funilAntigo.getName().equals(funilNovo.getName())
+                                funilAntigo.getId().equals(funilNovo.getId())
                         )
                 )
                 .toList();

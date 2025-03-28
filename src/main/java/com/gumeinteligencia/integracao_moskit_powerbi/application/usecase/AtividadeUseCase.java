@@ -26,6 +26,9 @@ public class AtividadeUseCase {
     private final UsuarioUseCase usuarioUseCase;
     private final NegocioUseCase negocioUseCase;
     private final EmpresaUseCase empresaUseCase;
+    private final NegocioMapper negocioMapper;
+    private final UsuarioMapper usuarioMapper;
+    private final EmpresaMapper empresaMapper;
 
     public int atualiza() {
 //        System.out.println("Começando atualização de atividades...");
@@ -66,15 +69,15 @@ public class AtividadeUseCase {
 
     private AtividadeDto buscaDadosNecessarios(AtividadeDto atividade) {
 
-        UsuarioDto usuarioResponsible = UsuarioMapper.paraDto(
+        UsuarioDto usuarioResponsible = usuarioMapper.paraDto(
                 usuarioUseCase.consultarPorId(atividade.getResponsible().id())
         );
 
-        UsuarioDto usuarioCreated = UsuarioMapper.paraDto(
+        UsuarioDto usuarioCreated = usuarioMapper.paraDto(
                 usuarioUseCase.consultarPorId(atividade.getCreatedBy().id())
         );
 
-        UsuarioDto usuarioDone = UsuarioMapper.paraDto(
+        UsuarioDto usuarioDone = usuarioMapper.paraDto(
                 usuarioUseCase.consultarPorId(atividade.getDoneUser().id())
         );
 
@@ -82,7 +85,7 @@ public class AtividadeUseCase {
 
         if (!negocios.isEmpty()) {
             negocios = negocios.stream()
-                    .map(negocio -> NegocioMapper.paraDto(
+                    .map(negocio -> negocioMapper.paraDto(
                                     negocioUseCase.consultarPorId(negocio.getId())
                             )
                     )
@@ -95,7 +98,7 @@ public class AtividadeUseCase {
 
         if (!empresas.isEmpty()) {
             empresas = empresas.stream()
-                    .map(empresa -> EmpresaMapper.paraDto(
+                    .map(empresa -> empresaMapper.paraDto(
                                     empresaUseCase.consultarPorId(empresa.id())
                             )
                     )

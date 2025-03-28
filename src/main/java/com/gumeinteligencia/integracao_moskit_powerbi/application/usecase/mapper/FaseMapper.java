@@ -2,22 +2,28 @@ package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mappe
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.FaseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
+@Component
 public class FaseMapper {
 
-    public static Fase paraDomain(FaseDto dto) {
+    private final FunilMapper funilMapper;
+
+    public Fase paraDomain(FaseDto dto) {
         return Fase.builder()
                 .id(dto.getId())
                 .name(dto.getName())
-                .pipeline(FunilMapper.paraDomain(dto.getPipeline()))
+                .pipeline(funilMapper.paraDomain(dto.getPipeline()))
                 .build();
     }
 
-    public static FaseDto paraDto(Fase domain) {
+    public FaseDto paraDto(Fase domain) {
         return FaseDto.builder()
                 .id(domain.getId())
                 .name(domain.getName())
-                .pipeline(FunilMapper.paraDto(domain.getPipeline()))
+                .pipeline(funilMapper.paraDto(domain.getPipeline()))
                 .build();
     }
 }

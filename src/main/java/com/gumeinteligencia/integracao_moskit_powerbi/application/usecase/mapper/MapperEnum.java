@@ -5,9 +5,11 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.TipoAtividade;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.TipoAtividadeDto;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 public class MapperEnum {
     public static Qualificacao organizaQualificacao(NegocioDto dto) {
 

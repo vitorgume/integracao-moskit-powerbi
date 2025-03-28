@@ -21,6 +21,7 @@ public class UsuarioUseCase {
 
     private final UsuarioGateway gateway;
     private final UsuarioGatewayApi gatewayApi;
+    private final UsuarioMapper usuarioMapper;
 
     public Usuario consultarPorId(Integer id) {
         log.info("Consultando usuário pelo id. Id: {}", id);
@@ -43,7 +44,7 @@ public class UsuarioUseCase {
 
         List<Usuario> usuariosNovos = gatewayApi.consultarUsuarios()
                 .stream()
-                .map(UsuarioMapper::paraDomain)
+                .map(usuarioMapper::paraDomain)
                 .toList();
 
         AtomicInteger contAtualizacoes = new AtomicInteger();

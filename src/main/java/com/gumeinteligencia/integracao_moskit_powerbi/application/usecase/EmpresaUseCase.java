@@ -23,6 +23,7 @@ public class EmpresaUseCase {
     private final EmpresaGateway gateway;
     private final EmpresaGatewayApi empresaGatewayApi;
     private final UsuarioUseCase usuarioUseCase;
+    private final EmpresaMapper empresaMapper;
 
     public Empresa consultarPorId(Integer id) {
         log.info("Consultando empresa pelo id. Id: {}", id);
@@ -45,7 +46,7 @@ public class EmpresaUseCase {
 
         List<Empresa> empresasNovas = empresaGatewayApi.consultaEmpresas()
                 .stream()
-                .map(EmpresaMapper::paraDomain)
+                .map(empresaMapper::paraDomain)
                 .toList();
 
         AtomicInteger contAtualizacoes = new AtomicInteger();
@@ -59,7 +60,7 @@ public class EmpresaUseCase {
         List<Empresa> empresasCadastrar = empresasNovas.stream()
                 .filter(empresaNova ->
                         empresasAntigas.stream().noneMatch(empresaAntiga ->
-                                empresaAntiga.getName().equals(empresaNova.getName())
+                                empresaAntiga.getId().equals(empresaNova.getId())
                         )
                 )
                 .toList();

@@ -15,7 +15,7 @@ import com.gumeinteligencia.integracao_moskit_powerbi.domain.Movimentacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FaseMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FunilMapper;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.MovimentacaoNegocioMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.MovimentacaoMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +36,10 @@ public class MovimentacaoUseCase {
     private final FaseUseCase faseUseCase;
     private final FunilUseCase funilUseCase;
     private final UsuarioUseCase usuarioUseCase;
+    private final FaseMapper faseMapper;
+    private final FunilMapper funilMapper;
+    private final UsuarioMapper usuarioMapper;
+    private final MovimentacaoMapper movimentacaoMapper;
 
     public List<Movimentacao> listar() {
         log.info("Listando movimentações...");
@@ -70,7 +74,7 @@ public class MovimentacaoUseCase {
             List<Movimentacao> movimentacoes = gatewayApi.consultaMovimentacoes(negocio.getId())
                     .stream()
                     .map(this::buscaDadosNecessarios)
-                    .map(MovimentacaoNegocioMapper::paraDomain)
+                    .map(movimentacaoMapper::paraDomain)
                     .toList();
 
             if (movimentacoes.isEmpty()) {
@@ -122,27 +126,27 @@ public class MovimentacaoUseCase {
 
         if(movimentacao.getCurrentStage() == null) {
             faseAtual = negocioUseCase.consultarPorId(movimentacao.getDeal().getId()).getStage();
-            movimentacao.setCurrentStage(FaseMapper.paraDto(faseAtual));
+            movimentacao.setCurrentStage(faseMapper.paraDto(faseAtual));
         } else {
             faseAtual = faseUseCase.consultarPorId(movimentacao.getCurrentStage().getId());
         }
 
         Funil funilStageAtual = funilUseCase.consultarPorId(faseAtual.getPipeline().getId());
-        movimentacao.getCurrentStage().setPipeline(FunilMapper.paraDto(funilStageAtual));
+        movimentacao.getCurrentStage().setPipeline(funilMapper.paraDto(funilStageAtual));
 
         if(movimentacao.getOldStage() != null) {
             Fase faseAntiga = faseUseCase.consultarPorId(movimentacao.getOldStage().getId());
             Funil funilStageAntigo = funilUseCase.consultarPorId(faseAntiga.getPipeline().getId());
-            movimentacao.getOldStage().setPipeline(FunilMapper.paraDto(funilStageAntigo));
+            movimentacao.getOldStage().setPipeline(funilMapper.paraDto(funilStageAntigo));
         }
 
         NegocioDto negocioDto = negocioGatewayApi.consultarPorId(movimentacao.getDeal().getId());
 
         Negocio negocio = negocioUseCase.consultarPorId(movimentacao.getDeal().getId());
-        FaseDto fase = FaseMapper.paraDto(faseUseCase.consultarPorId(negocio.getStage().getId()));
+        FaseDto fase = faseMapper.paraDto(faseUseCase.consultarPorId(negocio.getStage().getId()));
 
-        UsuarioDto usuarioResponsavel = UsuarioMapper.paraDto(usuarioUseCase.consultarPorId(negocio.getResponsible().getId()));
-        UsuarioDto usuarioCriador = UsuarioMapper.paraDto(usuarioUseCase.consultarPorId(negocio.getCreatedBy().getId()));
+        UsuarioDto usuarioResponsavel = usuarioMapper.paraDto(usuarioUseCase.consultarPorId(negocio.getResponsible().getId()));
+        UsuarioDto usuarioCriador = usuarioMapper.paraDto(usuarioUseCase.consultarPorId(negocio.getCreatedBy().getId()));
 
 
 

@@ -23,6 +23,7 @@ public class FaseUseCase {
     private final FaseGateway gateway;
     private final FaseGatewayApi gatewayApi;
     private final FunilUseCase funilUseCase;
+    private final FaseMapper faseMapper;
 
     public Fase consultarPorId(Integer id) {
         log.info("Consultando fase pelo seu id. Id: {}", id);
@@ -45,7 +46,7 @@ public class FaseUseCase {
 
         List<Fase> faseNovas = gatewayApi.consultaFases()
                 .stream()
-                .map(FaseMapper::paraDomain)
+                .map(faseMapper::paraDomain)
                 .toList();
 
         AtomicInteger contAtualizacoes = new AtomicInteger();
@@ -59,7 +60,7 @@ public class FaseUseCase {
         List<Fase> fasesCadastrar = faseNovas.stream()
                 .filter(faseNovo ->
                         fasesAntigas.stream().noneMatch(faseAntiga ->
-                                faseAntiga.getName().equals(faseNovo.getName())
+                                faseAntiga.getId().equals(faseNovo.getId())
                         )
                 )
                 .toList();

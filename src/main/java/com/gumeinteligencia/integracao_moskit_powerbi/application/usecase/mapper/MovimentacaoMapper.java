@@ -2,25 +2,32 @@ package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mappe
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Movimentacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.MovimentacaoDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-public class MovimentacaoNegocioMapper {
+@RequiredArgsConstructor
+@Component
+public class MovimentacaoMapper {
 
-    public static Movimentacao paraDomain(MovimentacaoDto dto) {
+    private final NegocioMapper negocioMapper;
+    private final FaseMapper faseMapper;
+
+    public Movimentacao paraDomain(MovimentacaoDto dto) {
         if(dto.getOldStage() == null) {
             return Movimentacao.builder()
                     .id(dto.getId())
-                    .negocio(NegocioMapper.paraDomain(dto.getDeal()))
+                    .negocio(negocioMapper.paraDomain(dto.getDeal()))
                     .dataCriacao(MapperData.trasnformaData(dto.getDateCreated()))
-                    .faseAtual(FaseMapper.paraDomain(dto.getCurrentStage()))
+                    .faseAtual(faseMapper.paraDomain(dto.getCurrentStage()))
                     .primeiraNavegacao(dto.getFirstNavigation())
                     .build();
         } else {
             return Movimentacao.builder()
                     .id(dto.getId())
-                    .negocio(NegocioMapper.paraDomain(dto.getDeal()))
+                    .negocio(negocioMapper.paraDomain(dto.getDeal()))
                     .dataCriacao(MapperData.trasnformaData(dto.getDateCreated()))
-                    .faseAntiga(FaseMapper.paraDomain(dto.getOldStage()))
-                    .faseAtual(FaseMapper.paraDomain(dto.getCurrentStage()))
+                    .faseAntiga(faseMapper.paraDomain(dto.getOldStage()))
+                    .faseAtual(faseMapper.paraDomain(dto.getCurrentStage()))
                     .primeiraNavegacao(dto.getFirstNavigation())
                     .build();
         }
