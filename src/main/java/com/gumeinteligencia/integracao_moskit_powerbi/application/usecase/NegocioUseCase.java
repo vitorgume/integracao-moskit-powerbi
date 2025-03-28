@@ -66,26 +66,7 @@ public class NegocioUseCase {
                 .map(mapper::paraDomain)
                 .toList();
 
-//        List<Negocio> negociosNovos = negociosDtos.stream()
-//                .peek(negocio -> {
-//                    List<CampoPersonalizadoDto> camposPersonalizado = negocio.getEntityCustomFields()
-//                            .stream()
-//                            .filter(campoPersonalizado -> campoPersonalizado.id().equals("CF_8P5q4Vi6ioJ7lmRJ"))
-//                            .toList();
-//
-//                    negocio.setEntityCustomFields(camposPersonalizado);
-//                })
-//                .toList()
-//                .stream()
-//                .map(this::buscaDadosNecessarios)
-//                .map(mapper::paraDomain)
-//                .toList();
-
         AtomicInteger contAtualizacoes = new AtomicInteger();
-
-//        if (negociosNovos.isEmpty()) {
-//            throw new NenhumNegocioEncontradoException();
-//        }
 
         List<Negocio> negociosAntigos = gateway.listar();
 
@@ -123,6 +104,18 @@ public class NegocioUseCase {
         log.info("Negócio salvo com sucesso. Negócio: {}", negocioSalvo);
 
         return negocioSalvo;
+    }
+
+    public Negocio atualizaStatus(Negocio novoStatus) {
+        log.info("Atualizando status negócio pelo id. Id: {}", novoStatus.getId());
+
+        Negocio negocio = this.consultarPorId(novoStatus.getId());
+
+        negocio.setStatus(novoStatus.getStatus());
+
+        log.info("Status do negócio atualizado com sucesso. Negócio: {}", negocio);
+
+        return this.salvar(negocio);
     }
 
     private NegocioDto buscaDadosNecessarios(NegocioDto negocio) {

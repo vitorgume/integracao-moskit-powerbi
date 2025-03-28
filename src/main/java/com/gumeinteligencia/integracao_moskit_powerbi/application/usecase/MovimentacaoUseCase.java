@@ -9,10 +9,7 @@ import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.Fa
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.MovimentacaoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.UsuarioDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Movimentacao;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.*;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FaseMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.MovimentacaoMapper;
@@ -40,6 +37,7 @@ public class MovimentacaoUseCase {
     private final FunilMapper funilMapper;
     private final UsuarioMapper usuarioMapper;
     private final MovimentacaoMapper movimentacaoMapper;
+    private final AtomicInteger contAtualizacoes = new AtomicInteger();
 
     public List<Movimentacao> listar() {
         log.info("Listando movimentações...");
@@ -56,54 +54,31 @@ public class MovimentacaoUseCase {
 
         List<Negocio> todosNegocios = negocioUseCase.listar();
 
-
-        List<Movimentacao> movimentacaoList = this.listar();
-
-        List<Negocio> negociosSemMovimentacao = todosNegocios.stream()
-                .filter(negocio -> movimentacaoList.stream()
-                        .noneMatch(movimentacao -> movimentacao.getNegocio().getId().equals(negocio.getId())))
-                .toList();
-
-        if(todosNegocios.isEmpty()) {
+        if (todosNegocios.isEmpty()) {
             throw new NenhumNegocioEncontradoException();
         }
 
-        AtomicInteger contAtualizacoes = new AtomicInteger();
+        List<Negocio> todosNegociosAbertos = todosNegocios.stream()
+                .filter(negocio -> negocio.getStatus() == StatusNegocio.OPEN)
+                .toList();
 
-        negociosSemMovimentacao.forEach(negocio -> {
-            List<Movimentacao> movimentacoes = gatewayApi.consultaMovimentacoes(negocio.getId())
-                    .stream()
-                    .map(this::buscaDadosNecessarios)
-                    .map(movimentacaoMapper::paraDomain)
-                    .toList();
+        List<Movimentacao> movimentacaoList = this.listar();
+
+        todosNegociosAbertos.forEach(negocio -> {
+            List<Movimentacao> movimentacoes = this.consultaNaApi(negocio);
 
             if (movimentacoes.isEmpty()) {
                 throw new NenhumaMovimentacaoEncontradaException();
             }
 
-            List<Movimentacao> movimentacaosCorretas = movimentacoes
-                    .stream()
-                    .filter(movimentacao ->
-                            !(movimentacao.getFaseAtual().getId() == 446947 &&
-                            movimentacao.getFaseAntiga().getId() == 446689))
-                    .toList();
+            List<Movimentacao> movimentacaosCorretas = filtraMovimentacoes(movimentacoes);
 
 
-            List<Movimentacao> movimentacoesCadastrar = movimentacaosCorretas.stream()
-                    .filter(movimentacaoNova ->
-                            movimentacaoList.stream().noneMatch(movimentacaoAntiga ->
-                                    movimentacaoAntiga.getId().equals(movimentacaoNova.getId())
-                            )
-                    )
-                    .toList();
+            List<Movimentacao> movimentacoesCadastrar = this.filtraMovimentacoesParaCadastrar(movimentacaosCorretas, movimentacaoList);
 
-            movimentacoesCadastrar.forEach(movimentacao -> {
-                Movimentacao movimentacaoSalva =  this.salvar(movimentacao);
-                contAtualizacoes.getAndIncrement();
-                log.info("Movimentação atualizada com sucesso: {}", movimentacaoSalva);
-            });
-
+            this.salvaMovimentacoes(movimentacoesCadastrar);
         });
+
 
         log.info("Atualização de movimentações finalizada...");
         log.info("Quantidade de operações: " + contAtualizacoes.get());
@@ -121,10 +96,45 @@ public class MovimentacaoUseCase {
         return movimentacaoSalva;
     }
 
+    private void salvaMovimentacoes(List<Movimentacao> movimentacoesCadastrar) {
+        movimentacoesCadastrar.forEach(movimentacao -> {
+            Movimentacao movimentacaoSalva = this.salvar(movimentacao);
+            contAtualizacoes.getAndIncrement();
+            log.info("Movimentação atualizada com sucesso: {}", movimentacaoSalva);
+        });
+
+    }
+
+    private List<Movimentacao> filtraMovimentacoesParaCadastrar(List<Movimentacao> movimentacaosCorretas, List<Movimentacao> movimentacaoList) {
+        return movimentacaosCorretas.stream()
+                .filter(movimentacaoNova ->
+                        movimentacaoList.stream().noneMatch(movimentacaoAntiga ->
+                                movimentacaoAntiga.getId().equals(movimentacaoNova.getId())
+                        )
+                )
+                .toList();
+    }
+
+    private List<Movimentacao> filtraMovimentacoes(List<Movimentacao> movimentacoes) {
+        return movimentacoes.stream()
+                .filter(movimentacao ->
+                        !(movimentacao.getFaseAtual().getId() == 446947 &&
+                                movimentacao.getFaseAntiga().getId() == 446689))
+                .toList();
+    }
+
+    private List<Movimentacao> consultaNaApi(Negocio negocio) {
+        return gatewayApi.consultaMovimentacoes(negocio.getId())
+                .stream()
+                .map(this::buscaDadosNecessarios)
+                .map(movimentacaoMapper::paraDomain)
+                .toList();
+    }
+
     private MovimentacaoDto buscaDadosNecessarios(MovimentacaoDto movimentacao) {
         Fase faseAtual;
 
-        if(movimentacao.getCurrentStage() == null) {
+        if (movimentacao.getCurrentStage() == null) {
             faseAtual = negocioUseCase.consultarPorId(movimentacao.getDeal().getId()).getStage();
             movimentacao.setCurrentStage(faseMapper.paraDto(faseAtual));
         } else {
@@ -134,7 +144,7 @@ public class MovimentacaoUseCase {
         Funil funilStageAtual = funilUseCase.consultarPorId(faseAtual.getPipeline().getId());
         movimentacao.getCurrentStage().setPipeline(funilMapper.paraDto(funilStageAtual));
 
-        if(movimentacao.getOldStage() != null) {
+        if (movimentacao.getOldStage() != null) {
             Fase faseAntiga = faseUseCase.consultarPorId(movimentacao.getOldStage().getId());
             Funil funilStageAntigo = funilUseCase.consultarPorId(faseAntiga.getPipeline().getId());
             movimentacao.getOldStage().setPipeline(funilMapper.paraDto(funilStageAntigo));
@@ -147,7 +157,6 @@ public class MovimentacaoUseCase {
 
         UsuarioDto usuarioResponsavel = usuarioMapper.paraDto(usuarioUseCase.consultarPorId(negocio.getResponsible().getId()));
         UsuarioDto usuarioCriador = usuarioMapper.paraDto(usuarioUseCase.consultarPorId(negocio.getCreatedBy().getId()));
-
 
 
         movimentacao.getDeal().setStage(fase);
