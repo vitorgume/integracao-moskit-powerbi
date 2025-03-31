@@ -32,6 +32,7 @@ public class NegocioUseCase {
     private final UsuarioUseCase usuarioUseCase;
     private final NegocioMapper mapper;
     private final FunilMapper funilMapper;
+    private AtomicInteger contAtualizacoes = new AtomicInteger();
 
     public List<Negocio> listar() {
         log.info("Listando negócios...");
@@ -60,36 +61,21 @@ public class NegocioUseCase {
 
     public int atualiza() {
         log.info("Começando atualização de negócios...");
-        List<Negocio> negociosNovos = gatewayApi.consultaNegocios()
+        List<Negocio> negociosApi = gatewayApi.consultaNegocios()
                 .stream()
                 .map(this::buscaDadosNecessarios)
                 .map(mapper::paraDomain)
                 .toList();
 
-        AtomicInteger contAtualizacoes = new AtomicInteger();
 
-        List<Negocio> negociosAntigos = gateway.listar();
 
-        List<Negocio> negociosCadastrar = negociosNovos.stream()
-                .filter(negocioNovo ->
-                        negociosAntigos.stream().noneMatch(negocioAntigo ->
-                                negocioAntigo.getId().equals(negocioNovo.getId())
-                        )
-                )
-                .toList();
+        List<Negocio> negociosBancoDados = gateway.listar();
 
-        negociosCadastrar.forEach(negocio -> {
-            Usuario usuario = usuarioUseCase.consultarPorId(negocio.getResponsible().getId());
-            Fase fase = faseUseCase.consultarPorId(negocio.getStage().getId());
+        cadastrarNovosNegocios(negociosApi, negociosBancoDados);
 
-            negocio.setResponsible(usuario);
-            negocio.setCreatedBy(usuario);
-            negocio.setStage(fase);
+        atualizarStatusNegocios(negociosApi, negociosBancoDados);
 
-            Negocio negocioSalvo = this.salvar(negocio);
-            contAtualizacoes.getAndIncrement();
-            log.info("Negócio atualizado com sucesso: {}", negocioSalvo);
-        });
+
 
         log.info("Finalizado atualizações de negócios. Atualizações: {}", negociosCadastrar);
         log.info("Quantidade de operações: " + contAtualizacoes.get());
@@ -116,6 +102,47 @@ public class NegocioUseCase {
         log.info("Status do negócio atualizado com sucesso. Negócio: {}", negocio);
 
         return this.salvar(negocio);
+    }
+
+    private void atualizarStatusNegocios(List<Negocio> negociosApi, List<Negocio> negociosBancoDados) {
+        List<Negocio> negociosAtualizar = negociosBancoDados
+                .stream()
+                .filter(negocioApi ->
+                    negociosBancoDados.stream().noneMatch(negocioBd ->
+                            negocioApi.getId().equals(negocioBd.getId())
+                                    && negocioApi.getStatus().equals(negocioBd.getStatus())
+                    )
+                )
+                .toList();
+
+        negociosApi.forEach(negocio -> {
+            negociosBancoDados.stream()
+                    .filter(negocioBd -> negocio.getId().equals(negocioBd.getId()))
+                    .findFirst();
+        });
+    }
+
+    private void cadastrarNovosNegocios(List<Negocio> negociosApi, List<Negocio> negociosBancoDados) {
+        List<Negocio> negociosCadastrar = negociosApi.stream()
+                .filter(negocioNovo ->
+                        negociosBancoDados.stream().noneMatch(negocioAntigo ->
+                                negocioAntigo.getId().equals(negocioNovo.getId())
+                        )
+                )
+                .toList();
+
+        negociosCadastrar.forEach(negocio -> {
+            Usuario usuario = usuarioUseCase.consultarPorId(negocio.getResponsible().getId());
+            Fase fase = faseUseCase.consultarPorId(negocio.getStage().getId());
+
+            negocio.setResponsible(usuario);
+            negocio.setCreatedBy(usuario);
+            negocio.setStage(fase);
+
+            Negocio negocioSalvo = this.salvar(negocio);
+            contAtualizacoes.getAndIncrement();
+            log.info("Negócio atualizado com sucesso: {}", negocioSalvo);
+        });
     }
 
     private NegocioDto buscaDadosNecessarios(NegocioDto negocio) {

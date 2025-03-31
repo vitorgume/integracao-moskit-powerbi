@@ -51,10 +51,6 @@ public class EmpresaUseCase {
 
         AtomicInteger contAtualizacoes = new AtomicInteger();
 
-        if(empresasNovas.isEmpty()) {
-            throw new NenhumaEmpresaEncontradaException();
-        }
-
         List<Empresa> empresasAntigas = gateway.listar();
 
         List<Empresa> empresasCadastrar = empresasNovas.stream()
