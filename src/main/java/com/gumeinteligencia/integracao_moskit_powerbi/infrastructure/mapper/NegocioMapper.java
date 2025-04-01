@@ -16,8 +16,8 @@ public class NegocioMapper {
                 .createdBy(UsuarioMapper.paraDomain(entity.getCreatedBy()))
                 .dateCreated(entity.getDateCreated())
                 .closeDate(entity.getCloseDate())
-                .qualificacao(entity.getQualificacao())
                 .motivoPerda(entity.getMotivoPerda())
+                .segmento(entity.getSegmento())
                 .build();
     }
 
@@ -32,8 +32,8 @@ public class NegocioMapper {
                 .createdBy(UsuarioMapper.paraEntity(domain.getCreatedBy()))
                 .dateCreated(domain.getDateCreated())
                 .closeDate(domain.getCloseDate())
-                .qualificacao(domain.getQualificacao())
                 .motivoPerda(domain.getMotivoPerda())
+                .segmento(domain.getSegmento())
                 .build();
     }
 }

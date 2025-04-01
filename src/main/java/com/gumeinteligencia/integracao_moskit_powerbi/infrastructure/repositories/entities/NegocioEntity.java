@@ -1,6 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Qualificacao;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.Segmento;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.StatusNegocio;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,9 +46,9 @@ public class NegocioEntity {
     @Column(name = "close_Date")
     private LocalDate closeDate;
 
-    @Enumerated(EnumType.STRING)
-    private Qualificacao qualificacao;
-
     @Column(name = "motivo_perda")
     private String motivoPerda;
+
+    @Enumerated(EnumType.STRING)
+    private Segmento segmento;
 }

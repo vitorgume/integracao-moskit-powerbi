@@ -21,8 +21,8 @@ public class Negocio {
     private Fase stage;
     private LocalDate dateCreated;
     private LocalDate closeDate;
-    private Qualificacao qualificacao;
     private String motivoPerda;
+    private Segmento segmento;
 
     public void atualizaDados(Negocio novosDados) {
         this.name = novosDados.getName();
@@ -30,7 +30,7 @@ public class Negocio {
         this.status = novosDados.getStatus();
         this.stage = novosDados.getStage();
         this.closeDate = novosDados.getCloseDate();
-        this.qualificacao = novosDados.getQualificacao();
         this.motivoPerda = novosDados.getMotivoPerda();
+        this.segmento = novosDados.getSegmento();
     }
 }

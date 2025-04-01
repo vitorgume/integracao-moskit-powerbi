@@ -105,6 +105,7 @@ public class NegocioUseCase {
         negocio.atualizaDados(negocioAtualizado);
 
         log.info("Status do negócio atualizado com sucesso. Negócio: {}", negocio);
+        contAtualizacoes.getAndIncrement();
 
         return this.salvar(negocio);
     }
@@ -128,6 +129,7 @@ public class NegocioUseCase {
             if (negocioBd != null) {
                 negocioBd.atualizaDados(negocioApi);
                 this.salvar(negocioBd);
+                contAtualizacoes.getAndIncrement();
             }
         });
 

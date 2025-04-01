@@ -1,11 +1,16 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.MotivoPerdaUseCase;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.MotivoPerdaDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import javax.swing.text.html.Option;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -26,8 +31,8 @@ public class NegocioMapper {
                 .createdBy(usuarioMapper.paraDomain(dto.getCreatedBy()))
                 .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
                 .closeDate(MapperData.trasnformaData(dto.getCloseDate()))
-                .qualificacao(MapperEnum.organizaQualificacao(dto))
                 .motivoPerda(this.mapperMotivoPerda(dto))
+                .segmento(mapperSegmento(dto.getEntityCustomFields()))
                 .build();
     }
 
@@ -42,7 +47,6 @@ public class NegocioMapper {
                     .responsible(usuarioMapper.paraDto(domain.getResponsible()))
                     .createdBy(usuarioMapper.paraDto(domain.getCreatedBy()))
                     .dateCreated(MapperData.trasformaDataString(domain.getDateCreated()))
-                    .qualificacao(domain.getQualificacao())
                     .build();
         } else {
             return NegocioDto.builder()
@@ -55,7 +59,6 @@ public class NegocioMapper {
                     .createdBy(usuarioMapper.paraDto(domain.getCreatedBy()))
                     .dateCreated(MapperData.trasformaDataString(domain.getDateCreated()))
                     .closeDate(MapperData.trasformaDataString(domain.getCloseDate()))
-                    .qualificacao(domain.getQualificacao())
                     .build();
         }
     }
@@ -69,5 +72,12 @@ public class NegocioMapper {
         MotivoPerdaDto motivoPerda = motivoPerdaUseCase.consultarMotivo(dto.getLostReason().getId());
 
         return motivoPerda.getName();
+    }
+
+    private String mapperSegmento(List<CampoPersonalizadoDto> camposPersonalizados) {
+
+
+
+        return campoPersonalizadoOptional.isEmpty() ? "SEM_SEGMENTO" : campoPersonalizadoOptional.get().textValue();
     }
 }

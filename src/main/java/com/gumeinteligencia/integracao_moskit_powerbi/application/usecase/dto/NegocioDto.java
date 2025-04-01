@@ -1,6 +1,5 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Qualificacao;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.StatusNegocio;
 import lombok.*;
 
@@ -24,5 +23,4 @@ public class NegocioDto {
     private String dateCreated;
     private String closeDate;
     private List<CampoPersonalizadoDto> entityCustomFields;
-    private Qualificacao qualificacao;
 }
