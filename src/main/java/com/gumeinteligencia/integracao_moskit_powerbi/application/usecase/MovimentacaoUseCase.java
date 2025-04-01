@@ -62,9 +62,13 @@ public class MovimentacaoUseCase {
                 .filter(negocio -> negocio.getStatus() == StatusNegocio.OPEN)
                 .toList();
 
+        List<Negocio> negociosFiltrados = todosNegociosAbertos.stream()
+                .filter(negocio -> negocio.getStage().getId() != 446685)
+                .toList();
+
         List<Movimentacao> movimentacaoList = this.listar();
 
-        todosNegociosAbertos.forEach(negocio -> {
+        negociosFiltrados.forEach(negocio -> {
             List<Movimentacao> movimentacoes = this.consultaNaApi(negocio);
 
             if (movimentacoes.isEmpty()) {

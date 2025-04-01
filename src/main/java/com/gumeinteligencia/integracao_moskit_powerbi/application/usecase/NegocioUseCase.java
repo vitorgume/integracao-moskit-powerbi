@@ -1,10 +1,8 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.NegocioNaoEncontradoExcpetion;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.NenhumNegocioEncontradoException;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.NegocioGatewayApi;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioGateway;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
@@ -17,8 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class NegocioUseCase {
     private final UsuarioUseCase usuarioUseCase;
     private final NegocioMapper mapper;
     private final FunilMapper funilMapper;
-    private AtomicInteger contAtualizacoes = new AtomicInteger();
+    private final AtomicInteger contAtualizacoes = new AtomicInteger();
 
     public List<Negocio> listar() {
         log.info("Listando negócios...");
@@ -73,11 +74,15 @@ public class NegocioUseCase {
 
         cadastrarNovosNegocios(negociosApi, negociosBancoDados);
 
-        atualizarStatusNegocios(negociosApi, negociosBancoDados);
+        negociosApi = gatewayApi.consultarTodosNegocis()
+                        .stream()
+                        .map(this::buscaDadosNecessarios)
+                        .map(mapper::paraDomain)
+                        .toList();
+
+        atualizaNegocioLocal(negociosApi, negociosBancoDados);
 
 
-
-        log.info("Finalizado atualizações de negócios. Atualizações: {}", negociosCadastrar);
         log.info("Quantidade de operações: " + contAtualizacoes.get());
         return contAtualizacoes.get();
     }
@@ -92,35 +97,43 @@ public class NegocioUseCase {
         return negocioSalvo;
     }
 
-    public Negocio atualizaStatus(Negocio novoStatus) {
-        log.info("Atualizando status negócio pelo id. Id: {}", novoStatus.getId());
+    public Negocio atualizaNegocio(Negocio negocioAtualizado) {
+        log.info("Atualizando status negócio pelo id. Id: {}", negocioAtualizado.getId());
 
-        Negocio negocio = this.consultarPorId(novoStatus.getId());
+        Negocio negocio = this.consultarPorId(negocioAtualizado.getId());
 
-        negocio.setStatus(novoStatus.getStatus());
+        negocio.atualizaDados(negocioAtualizado);
 
         log.info("Status do negócio atualizado com sucesso. Negócio: {}", negocio);
 
         return this.salvar(negocio);
     }
 
-    private void atualizarStatusNegocios(List<Negocio> negociosApi, List<Negocio> negociosBancoDados) {
-        List<Negocio> negociosAtualizar = negociosBancoDados
-                .stream()
-                .filter(negocioApi ->
-                    negociosBancoDados.stream().noneMatch(negocioBd ->
-                            negocioApi.getId().equals(negocioBd.getId())
-                                    && negocioApi.getStatus().equals(negocioBd.getStatus())
-                    )
-                )
+    private void atualizaNegocioLocal(List<Negocio> negociosApi, List<Negocio> negociosBancoDados) {
+        log.info("Atualizando status do negócio...");
+
+        Map<Integer, Negocio> negocioBancoMap = negociosBancoDados.stream()
+                .collect(Collectors.toMap(Negocio::getId, Function.identity()));
+
+        List<Negocio> negociosAtualizar = negociosApi.stream()
+                .filter(negocioApi -> {
+                    Negocio negocioBd = negocioBancoMap.get(negocioApi.getId());
+                    return negocioBd != null
+                            && !negocioApi.equals(negocioBd);
+                })
                 .toList();
 
-        negociosApi.forEach(negocio -> {
-            negociosBancoDados.stream()
-                    .filter(negocioBd -> negocio.getId().equals(negocioBd.getId()))
-                    .findFirst();
+        negociosAtualizar.forEach(negocioApi -> {
+            Negocio negocioBd = negocioBancoMap.get(negocioApi.getId());
+            if (negocioBd != null) {
+                negocioBd.atualizaDados(negocioApi);
+                this.salvar(negocioBd);
+            }
         });
+
+        log.info("Atualização de status dos negócios finalizada.");
     }
+
 
     private void cadastrarNovosNegocios(List<Negocio> negociosApi, List<Negocio> negociosBancoDados) {
         List<Negocio> negociosCadastrar = negociosApi.stream()
@@ -143,6 +156,8 @@ public class NegocioUseCase {
             contAtualizacoes.getAndIncrement();
             log.info("Negócio atualizado com sucesso: {}", negocioSalvo);
         });
+
+        log.info("Finalizado atualizações de negócios. Atualizações: {}", negociosCadastrar);
     }
 
     private NegocioDto buscaDadosNecessarios(NegocioDto negocio) {

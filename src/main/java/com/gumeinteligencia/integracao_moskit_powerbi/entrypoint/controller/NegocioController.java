@@ -21,7 +21,7 @@ public class NegocioController {
 
     @PostMapping
     public ResponseEntity<NegocioDto> atualizaStatus(@RequestBody NegocioDto novoNegocio) {
-        Negocio negocioAtualizado = useCase.atualizaStatus(mapper.paraDomain(novoNegocio));
+        Negocio negocioAtualizado = useCase.atualizaNegocio(mapper.paraDomain(novoNegocio));
         return ResponseEntity.ok(mapper.paraDto(negocioAtualizado));
     }
 

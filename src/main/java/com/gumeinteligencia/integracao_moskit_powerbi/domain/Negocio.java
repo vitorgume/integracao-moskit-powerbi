@@ -23,4 +23,14 @@ public class Negocio {
     private LocalDate closeDate;
     private Qualificacao qualificacao;
     private String motivoPerda;
+
+    public void atualizaDados(Negocio novosDados) {
+        this.name = novosDados.getName();
+        this.price = novosDados.getPrice();
+        this.status = novosDados.getStatus();
+        this.stage = novosDados.getStage();
+        this.closeDate = novosDados.getCloseDate();
+        this.qualificacao = novosDados.getQualificacao();
+        this.motivoPerda = novosDados.getMotivoPerda();
+    }
 }
