@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovid
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.EmpresaGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderBancoDadosException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.EmpresaMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.EmpresaRepository;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.EmpresaEntity;
@@ -31,7 +31,7 @@ public class EmpresaDataProvider implements EmpresaGateway {
             empresaEntities = repository.findAll();
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_LISTAGEM_EMPRESAS, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_LISTAGEM_EMPRESAS, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_LISTAGEM_EMPRESAS, ex.getCause());
         }
 
         return empresaEntities.stream().map(EmpresaMapper::paraDomain).toList();
@@ -45,7 +45,7 @@ public class EmpresaDataProvider implements EmpresaGateway {
             empresaSalva = repository.save(EmpresaMapper.paraEntity(empresa));
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_SALVAR_EMPRESA, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_SALVAR_EMPRESA, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_SALVAR_EMPRESA, ex.getCause());
         }
 
         return EmpresaMapper.paraDomain(empresaSalva);
@@ -59,7 +59,7 @@ public class EmpresaDataProvider implements EmpresaGateway {
             empresa = repository.findById(id);
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_CONSULTAR_EMPRESA_POR_ID, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_CONSULTAR_EMPRESA_POR_ID, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_CONSULTAR_EMPRESA_POR_ID, ex.getCause());
         }
 
         return empresa.map(EmpresaMapper::paraDomain);

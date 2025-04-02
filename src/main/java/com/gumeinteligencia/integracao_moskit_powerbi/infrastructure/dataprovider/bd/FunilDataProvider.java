@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovid
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.FunilGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderBancoDadosException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.FunilEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.FunilRepository;
@@ -31,7 +31,7 @@ public class FunilDataProvider implements FunilGateway {
             funisEntities = repository.findAll();
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_LISTAGEM_FUNIS, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_LISTAGEM_FUNIS, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_LISTAGEM_FUNIS, ex.getCause());
         }
 
         return funisEntities.stream().map(FunilMapper::paraDomain).toList();
@@ -45,7 +45,7 @@ public class FunilDataProvider implements FunilGateway {
             funilSalvo = repository.save(FunilMapper.paraEntity(funil));
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_SALVAR_FUNIL, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_SALVAR_FUNIL, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_SALVAR_FUNIL, ex.getCause());
         }
 
         return FunilMapper.paraDomain(funilSalvo);
@@ -59,7 +59,7 @@ public class FunilDataProvider implements FunilGateway {
             funilEntity = repository.findById(id);
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_CONSULTAR_FUNIL_POR_ID, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_CONSULTAR_FUNIL_POR_ID, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_CONSULTAR_FUNIL_POR_ID, ex.getCause());
         }
 
         return funilEntity.map(FunilMapper::paraDomain);

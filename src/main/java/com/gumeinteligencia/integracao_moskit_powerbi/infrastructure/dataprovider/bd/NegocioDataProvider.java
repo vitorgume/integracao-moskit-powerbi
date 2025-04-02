@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovid
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderBancoDadosException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.NegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.NegocioRepository;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.NegocioEntity;
@@ -32,7 +32,7 @@ public class NegocioDataProvider implements NegocioGateway {
             negociosEntities = repository.findAll();
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_LISTAR_NEGOCIOS, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_LISTAR_NEGOCIOS, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_LISTAR_NEGOCIOS, ex.getCause());
         }
 
         return negociosEntities.stream().map(NegocioMapper::paraDomain).toList();
@@ -46,7 +46,7 @@ public class NegocioDataProvider implements NegocioGateway {
             negocioSalvo = repository.save(NegocioMapper.paraEntity(negocio));
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_SALVAR_NEGOCIO, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_SALVAR_NEGOCIO, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_SALVAR_NEGOCIO, ex.getCause());
         }
 
         return NegocioMapper.paraDomain(negocioSalvo);

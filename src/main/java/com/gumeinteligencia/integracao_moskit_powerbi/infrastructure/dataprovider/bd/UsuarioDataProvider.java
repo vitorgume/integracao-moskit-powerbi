@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovid
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.UsuarioGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderBancoDadosException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.UsuarioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.UsuarioEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.UsuarioRepository;
@@ -31,7 +31,7 @@ public class UsuarioDataProvider implements UsuarioGateway {
             usuarioEntities = repository.findAll();
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_LISTAGEM_USUARIOS, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_LISTAGEM_USUARIOS, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_LISTAGEM_USUARIOS, ex.getCause());
         }
 
         return usuarioEntities.stream().map(UsuarioMapper::paraDomain).toList();
@@ -45,7 +45,7 @@ public class UsuarioDataProvider implements UsuarioGateway {
             usuarioSalvo = repository.save(UsuarioMapper.paraEntity(usuario));
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_SALVAR_USUARIO, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_SALVAR_USUARIO, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_SALVAR_USUARIO, ex.getCause());
         }
 
         return UsuarioMapper.paraDomain(usuarioSalvo);
@@ -58,7 +58,7 @@ public class UsuarioDataProvider implements UsuarioGateway {
             usuarioEntity = repository.findById(id);
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_CONSULTAR_USUARIO_POR_ID, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_CONSULTAR_USUARIO_POR_ID, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_CONSULTAR_USUARIO_POR_ID, ex.getCause());
         }
 
         return usuarioEntity.map(UsuarioMapper::paraDomain);

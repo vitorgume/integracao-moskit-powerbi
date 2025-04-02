@@ -1,10 +1,8 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Segmento;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.TipoAtividade;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.TipoAtividadeDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -46,22 +44,5 @@ public class MapperEnum {
         }
 
         return Segmento.SEM_SEGMENTO;
-    }
-
-    public static TipoAtividade organizaTipoAtividade(TipoAtividadeDto dto) {
-        if (dto.getId() == null) {
-            return TipoAtividade.SEM_QUALIFICACAO;
-        } else {
-            Integer codigo = dto.getId();
-
-            TipoAtividade tipoAtividade;
-
-            tipoAtividade = Arrays.stream(TipoAtividade.values())
-                    .filter(q -> q.getCodigo().equals(codigo))
-                    .findFirst()
-                    .orElse(null);
-
-            return tipoAtividade;
-        }
     }
 }

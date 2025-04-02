@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovid
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.MovimentacaoGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Movimentacao;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderBancoDadosException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.MovimentacaoMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.MovimentacaoRepository;
@@ -29,7 +29,7 @@ public class MovimentacaoDataProvider implements MovimentacaoGateway {
             movimentacoesNegociosEntities = repository.findAll();
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_LISTAR_MOVIMENTACOES, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_LISTAR_MOVIMENTACOES, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_LISTAR_MOVIMENTACOES, ex.getCause());
         }
 
         return movimentacoesNegociosEntities.stream().map(MovimentacaoMapper::paraDomain).toList();

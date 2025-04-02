@@ -13,7 +13,6 @@ public class AtualizaUseCase {
     private final FaseUseCase faseUseCase;
     private final EmpresaUseCase empresaUseCase;
     private final MovimentacaoUseCase movitacoesUseCase;
-//    private final AtualizaAtividadeNegocioService atividadesNegocioService;
 
     public String gatewayAtualizacoes() {
         int quantidadeExecucoesUsuario = usuarioUseCase.atualiza();
@@ -22,11 +21,10 @@ public class AtualizaUseCase {
         int quantidadeExecucoesEmpresa = empresaUseCase.atualiza();
         int quantidadeExecucoesNegocio = negocioUseCase.atualiza();
         int quantidadeExecucoesMovimentacoesNegocios = movitacoesUseCase.atualiza();
-////        int quantidadeExecucoesAtividadesNegocios = atividadesNegocioService.atualiza();
 
         int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase
                 + quantidadeExecucoesEmpresa + quantidadeExecucoesNegocio + quantidadeExecucoesMovimentacoesNegocios;
 
-        return "Operação concluida com sucesso, quantidade de operações: " + total;
+        return "Atualização concluida com sucesso, quantidade de operações: " + total;
     }
 }

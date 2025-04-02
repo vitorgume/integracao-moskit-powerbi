@@ -2,7 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovid
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.FaseGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderException;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovider.exceptions.DataProviderBancoDadosException;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.FaseMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.FaseRepository;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.FaseEntity;
@@ -32,7 +32,7 @@ public class FaseDataProvider implements FaseGateway {
             fasesEntities = repository.findAll();
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_LISTAR_FASES, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_LISTAR_FASES, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_LISTAR_FASES, ex.getCause());
         }
 
         return fasesEntities.stream().map(FaseMapper::paraDomain).toList();
@@ -46,7 +46,7 @@ public class FaseDataProvider implements FaseGateway {
             faseSalva = repository.save(FaseMapper.paraEntity(fase));
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_SALVAR_FASE, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_SALVAR_FASE, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_SALVAR_FASE, ex.getCause());
         }
 
         return FaseMapper.paraDomain(faseSalva);
@@ -59,7 +59,7 @@ public class FaseDataProvider implements FaseGateway {
             faseEntity = repository.findById(id);
         } catch (Exception ex) {
             log.error(MENSAGEM_ERRO_CONSULTAR_FASE_POR_ID, ex);
-            throw new DataProviderException(MENSAGEM_ERRO_CONSULTAR_FASE_POR_ID, ex.getCause());
+            throw new DataProviderBancoDadosException(MENSAGEM_ERRO_CONSULTAR_FASE_POR_ID, ex.getCause());
         }
 
         return faseEntity.map(FaseMapper::paraDomain);

@@ -58,12 +58,10 @@ public class MovimentacaoUseCase {
             throw new NenhumNegocioEncontradoException();
         }
 
-        List<Negocio> todosNegociosAbertos = todosNegocios.stream()
-                .filter(negocio -> negocio.getStatus() == StatusNegocio.OPEN)
-                .toList();
-
-        List<Negocio> negociosFiltrados = todosNegociosAbertos.stream()
-                .filter(negocio -> negocio.getStage().getId() != 446685)
+        List<Negocio> negociosFiltrados = todosNegocios.stream()
+                .filter(negocio -> negocio.getStatus() == StatusNegocio.OPEN
+                        && negocio.getStage().getId() != 446685
+                )
                 .toList();
 
         List<Movimentacao> movimentacaoList = this.listar();
@@ -76,7 +74,6 @@ public class MovimentacaoUseCase {
             }
 
             List<Movimentacao> movimentacaosCorretas = filtraMovimentacoes(movimentacoes);
-
 
             List<Movimentacao> movimentacoesCadastrar = this.filtraMovimentacoesParaCadastrar(movimentacaosCorretas, movimentacaoList);
 
