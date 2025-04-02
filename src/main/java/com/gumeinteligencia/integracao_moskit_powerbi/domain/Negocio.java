@@ -11,6 +11,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @ToString
+@EqualsAndHashCode
 public class Negocio {
     private Integer id;
     private Usuario createdBy;

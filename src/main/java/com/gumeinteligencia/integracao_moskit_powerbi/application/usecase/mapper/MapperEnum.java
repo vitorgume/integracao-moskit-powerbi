@@ -12,11 +12,10 @@ import java.util.Optional;
 
 @Component
 public class MapperEnum {
+
     public static Segmento organizaSegmento(NegocioDto dto) {
 
-        if (dto.getEntityCustomFields() == null) {
-            return Segmento.SEM_SEGMENTO;
-        } else {
+        if (dto.getEntityCustomFields() != null) {
             if (!dto.getEntityCustomFields().isEmpty()) {
 
                 Optional<CampoPersonalizadoDto> campoPersonalizadoOptional = dto.getEntityCustomFields()
@@ -24,7 +23,7 @@ public class MapperEnum {
                         .filter(campoPersonalizado -> campoPersonalizado.id().equals("CF_wGrqzpi3i6W13mLo"))
                         .findFirst();
 
-                if(campoPersonalizadoOptional.isPresent()) {
+                if (campoPersonalizadoOptional.isPresent()) {
                     CampoPersonalizadoDto campoPersonalizado = campoPersonalizadoOptional.get();
 
                     if (campoPersonalizado.options() != null) {
@@ -37,21 +36,16 @@ public class MapperEnum {
                                 .findFirst()
                                 .orElse(null);
 
-                        if (segmento == null) {
-                            return Segmento.SEM_SEGMENTO;
+                        if (segmento != null) {
+                            return segmento;
                         }
 
-                        return segmento;
-                    } else {
-                        return Segmento.SEM_SEGMENTO;
                     }
                 }
-            } else {
-                return Segmento.SEM_SEGMENTO;
             }
         }
 
-        return null;
+        return Segmento.SEM_SEGMENTO;
     }
 
     public static TipoAtividade organizaTipoAtividade(TipoAtividadeDto dto) {

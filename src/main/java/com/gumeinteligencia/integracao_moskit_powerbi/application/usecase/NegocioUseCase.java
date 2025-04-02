@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -111,18 +112,18 @@ public class NegocioUseCase {
     }
 
     private void atualizaNegocioLocal(List<Negocio> negociosApi, List<Negocio> negociosBancoDados) {
-        log.info("Atualizando status do negócio...");
+        log.info("Atualizando negócios ja existenes...");
 
         Map<Integer, Negocio> negocioBancoMap = negociosBancoDados.stream()
                 .collect(Collectors.toMap(Negocio::getId, Function.identity()));
 
-        List<Negocio> negociosAtualizar = negociosApi.stream()
-                .filter(negocioApi -> {
-                    Negocio negocioBd = negocioBancoMap.get(negocioApi.getId());
-                    return negocioBd != null
-                            && !negocioApi.equals(negocioBd);
-                })
-                .toList();
+            List<Negocio> negociosAtualizar = negociosApi.stream()
+                    .filter(negocioApi -> {
+                        Negocio negocioBd = negocioBancoMap.get(negocioApi.getId());
+                        return negocioBd != null
+                                && comparaDiferencas(negocioApi, negocioBd);
+                    })
+                    .toList();
 
         negociosAtualizar.forEach(negocioApi -> {
             Negocio negocioBd = negocioBancoMap.get(negocioApi.getId());
@@ -133,7 +134,7 @@ public class NegocioUseCase {
             }
         });
 
-        log.info("Atualização de status dos negócios finalizada.");
+        log.info("Atualização de negócios ja existentes finalizada.");
     }
 
 
@@ -167,5 +168,16 @@ public class NegocioUseCase {
         Funil funilStage = funilUseCase.consultarPorId(fase.getPipeline().getId());
         negocio.getStage().setPipeline(funilMapper.paraDto(funilStage));
         return negocio;
+    }
+
+    private boolean comparaDiferencas(Negocio negocioApi, Negocio negocioBd) {
+        if(!negocioApi.getResponsible().getId().equals(negocioBd.getResponsible().getId())) return true;
+        if(!negocioApi.getName().equals(negocioBd.getName())) return true;
+        if(!negocioApi.getPrice().equals(negocioBd.getPrice())) return true;
+        if(!negocioApi.getStatus().toString().equals(negocioBd.getStatus().toString())) return true;
+        if(!negocioApi.getStage().getId().equals(negocioBd.getStage().getId())) return true;
+        if(!negocioApi.getCloseDate().toString().equals(negocioBd.getCloseDate().toString())) return true;
+        if(!negocioApi.getMotivoPerda().equals(negocioBd.getMotivoPerda())) return true;
+        return !negocioApi.getSegmento().toString().equals(negocioBd.getSegmento().toString());
     }
 }

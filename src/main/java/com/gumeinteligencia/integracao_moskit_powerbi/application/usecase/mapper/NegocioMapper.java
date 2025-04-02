@@ -32,7 +32,7 @@ public class NegocioMapper {
                 .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
                 .closeDate(MapperData.trasnformaData(dto.getCloseDate()))
                 .motivoPerda(this.mapperMotivoPerda(dto))
-                .segmento(mapperSegmento(dto.getEntityCustomFields()))
+                .segmento(MapperEnum.organizaSegmento(dto))
                 .build();
     }
 
@@ -72,12 +72,5 @@ public class NegocioMapper {
         MotivoPerdaDto motivoPerda = motivoPerdaUseCase.consultarMotivo(dto.getLostReason().getId());
 
         return motivoPerda.getName();
-    }
-
-    private String mapperSegmento(List<CampoPersonalizadoDto> camposPersonalizados) {
-
-
-
-        return campoPersonalizadoOptional.isEmpty() ? "SEM_SEGMENTO" : campoPersonalizadoOptional.get().textValue();
     }
 }
