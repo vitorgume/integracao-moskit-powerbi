@@ -19,6 +19,7 @@ public class NegocioMapper {
     private final MotivoPerdaUseCase motivoPerdaUseCase;
     private final FaseMapper faseMapper;
     private final UsuarioMapper usuarioMapper;
+    private final MapperEnum mapperEnum;
 
     public Negocio paraDomain(NegocioDto dto) {
         return Negocio.builder()
@@ -32,7 +33,7 @@ public class NegocioMapper {
                 .dateCreated(MapperData.trasnformaData(dto.getDateCreated()))
                 .closeDate(MapperData.trasnformaData(dto.getCloseDate()))
                 .motivoPerda(this.mapperMotivoPerda(dto))
-                .segmento(MapperEnum.organizaSegmento(dto))
+                .segmento(mapperEnum.organizaSegmento(dto))
                 .build();
     }
 

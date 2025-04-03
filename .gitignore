@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ### Arquivo .env ###
-!**/properties/src/main/resources
+#!**/properties/src/main/resources
+.env

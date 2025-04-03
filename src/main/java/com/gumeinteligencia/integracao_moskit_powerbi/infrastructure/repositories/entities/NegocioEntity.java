@@ -1,6 +1,6 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities;
 
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Segmento;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.segmento.Segmento;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.StatusNegocio;
 import jakarta.persistence.*;
 import lombok.*;

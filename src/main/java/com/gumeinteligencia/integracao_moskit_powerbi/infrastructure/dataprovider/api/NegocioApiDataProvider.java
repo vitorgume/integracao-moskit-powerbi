@@ -25,14 +25,19 @@ public class NegocioApiDataProvider implements NegocioGatewayApi {
     @Value("${moskit.api.base-url}")
     private final String baseUrl;
 
+    @Value("${brightdash.stage.cod.filtro}")
+    private final Integer codFaseFiltro;
+
     public NegocioApiDataProvider(
             WebClient webClient,
             @Value("${moskit.api.key}") String apiKey,
-            @Value("${moskit.api.base-url}") String baseUrl
+            @Value("${moskit.api.base-url}") String baseUrl,
+            @Value("${brightdash.stage.cod.filtro}") Integer codFaseFiltro
     ){
         this.webClient = webClient;
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
+        this.codFaseFiltro = codFaseFiltro;
     }
 
     @Override
@@ -92,7 +97,7 @@ public class NegocioApiDataProvider implements NegocioGatewayApi {
                 Map.of(
                         "field", "stage",
                         "expression", "none_of",
-                        "values", List.of(446685)
+                        "values", List.of(codFaseFiltro)
                 )
         );
 

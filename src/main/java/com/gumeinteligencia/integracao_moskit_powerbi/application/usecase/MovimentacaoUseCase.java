@@ -14,15 +14,14 @@ import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.MovimentacaoMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.UsuarioMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class MovimentacaoUseCase {
 
@@ -38,6 +37,47 @@ public class MovimentacaoUseCase {
     private final UsuarioMapper usuarioMapper;
     private final MovimentacaoMapper movimentacaoMapper;
     private final AtomicInteger contAtualizacoes = new AtomicInteger();
+
+    @Value("${brightdash.stage.cod.filtro}")
+    private final Integer codStageFiltro;
+
+    @Value("${brightdash.stage.cod.atual.filtro}")
+    private final Integer codStageAtualFiltro;
+
+    @Value("${brightdash.stage.cod.antigo.filtro}")
+    private final Integer codStageAntigoFiltro;
+
+    public MovimentacaoUseCase(
+            MovimentacaoGateway gateway,
+            MovimentacaoGatewayApi gatewayApi,
+            NegocioGatewayApi negocioGatewayApi,
+            NegocioUseCase negocioUseCase,
+            FaseUseCase faseUseCase,
+            FunilUseCase funilUseCase,
+            UsuarioUseCase usuarioUseCase,
+            FaseMapper faseMapper,
+            FunilMapper funilMapper,
+            UsuarioMapper usuarioMapper,
+            MovimentacaoMapper movimentacaoMapper,
+            @Value("${brightdash.stage.cod.filtro}") Integer codStageFiltro,
+            @Value("${brightdash.stage.cod.atual.filtro}") Integer codStageAtualFiltro,
+            @Value("${brightdash.stage.cod.antigo.filtro}") Integer codStageAntigoFiltro
+    ){
+        this.gateway = gateway;
+        this.gatewayApi = gatewayApi;
+        this.negocioGatewayApi = negocioGatewayApi;
+        this.negocioUseCase = negocioUseCase;
+        this.faseUseCase = faseUseCase;
+        this.funilUseCase = funilUseCase;
+        this.usuarioUseCase = usuarioUseCase;
+        this.faseMapper = faseMapper;
+        this.funilMapper = funilMapper;
+        this.usuarioMapper = usuarioMapper;
+        this.movimentacaoMapper = movimentacaoMapper;
+        this.codStageFiltro = codStageFiltro;
+        this.codStageAtualFiltro = codStageAtualFiltro;
+        this.codStageAntigoFiltro = codStageAntigoFiltro;
+    }
 
     public List<Movimentacao> listar() {
         log.info("Listando movimentações...");
@@ -60,7 +100,7 @@ public class MovimentacaoUseCase {
 
         List<Negocio> negociosFiltrados = todosNegocios.stream()
                 .filter(negocio -> negocio.getStatus() == StatusNegocio.OPEN
-                        && negocio.getStage().getId() != 446685
+                        && !negocio.getStage().getId().equals(codStageFiltro)
                 )
                 .toList();
 
@@ -119,8 +159,8 @@ public class MovimentacaoUseCase {
     private List<Movimentacao> filtraMovimentacoes(List<Movimentacao> movimentacoes) {
         return movimentacoes.stream()
                 .filter(movimentacao ->
-                        !(movimentacao.getFaseAtual().getId() == 446947 &&
-                                movimentacao.getFaseAntiga().getId() == 446689))
+                        !(movimentacao.getFaseAtual().getId().equals(codStageAtualFiltro) &&
+                                movimentacao.getFaseAntiga().getId().equals(codStageAntigoFiltro)))
                 .toList();
     }
 

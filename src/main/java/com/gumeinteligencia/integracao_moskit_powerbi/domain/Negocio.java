@@ -1,10 +1,10 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.domain;
 
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.segmento.Segmento;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
