@@ -4,6 +4,7 @@ import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.Nen
 import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.NenhumaMovimentacaoEncontradaException;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.MovimentacaoGatewayApi;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.NegocioGatewayApi;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.MovimentacaoDashBoardGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.MovimentacaoGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.FaseDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.MovimentacaoDto;
@@ -28,6 +29,7 @@ public class MovimentacaoUseCase {
     private final MovimentacaoGateway gateway;
     private final MovimentacaoGatewayApi gatewayApi;
     private final NegocioGatewayApi negocioGatewayApi;
+    private final MovimentacaoDashBoardGateway gatewayDashBoard;
     private final NegocioUseCase negocioUseCase;
     private final FaseUseCase faseUseCase;
     private final FunilUseCase funilUseCase;
@@ -51,6 +53,7 @@ public class MovimentacaoUseCase {
             MovimentacaoGateway gateway,
             MovimentacaoGatewayApi gatewayApi,
             NegocioGatewayApi negocioGatewayApi,
+            MovimentacaoDashBoardGateway gatewayDashBoard,
             NegocioUseCase negocioUseCase,
             FaseUseCase faseUseCase,
             FunilUseCase funilUseCase,
@@ -77,6 +80,7 @@ public class MovimentacaoUseCase {
         this.codStageFiltro = codStageFiltro;
         this.codStageAtualFiltro = codStageAtualFiltro;
         this.codStageAntigoFiltro = codStageAntigoFiltro;
+        this.gatewayDashBoard = gatewayDashBoard;
     }
 
     public List<Movimentacao> listar() {
@@ -131,6 +135,7 @@ public class MovimentacaoUseCase {
         log.info("Salvando movimentação. Movimentação: {}", novaMovimentacao);
 
         Movimentacao movimentacaoSalva = gateway.salvar(novaMovimentacao);
+        gatewayDashBoard.salvar(novaMovimentacao);
 
         log.info("Movimentação salva com sucesso. Movimentação: {}", movimentacaoSalva);
 

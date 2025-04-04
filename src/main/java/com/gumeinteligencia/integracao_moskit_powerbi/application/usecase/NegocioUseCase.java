@@ -2,6 +2,7 @@ package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.NegocioNaoEncontradoExcpetion;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.NegocioGatewayApi;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioDashBoardGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
@@ -29,6 +30,7 @@ public class NegocioUseCase {
 
     private final NegocioGateway gateway;
     private final NegocioGatewayApi gatewayApi;
+    private final NegocioDashBoardGateway gatewayDashBoard;
     private final FaseUseCase faseUseCase;
     private final FunilUseCase funilUseCase;
     private final UsuarioUseCase usuarioUseCase;
@@ -92,6 +94,7 @@ public class NegocioUseCase {
         log.info("Salvando novo negócio. Negócio: {}", novoNegocio);
 
         Negocio negocioSalvo = gateway.salvar(novoNegocio);
+        gatewayDashBoard.salvar(novoNegocio);
 
         log.info("Negócio salvo com sucesso. Negócio: {}", negocioSalvo);
 

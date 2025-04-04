@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.NegocioDashBoardEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.NegocioEntity;
 
 public class NegocioMapper {
@@ -23,6 +24,22 @@ public class NegocioMapper {
 
     public static NegocioEntity paraEntity(Negocio domain) {
         return NegocioEntity.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .price(domain.getPrice())
+                .stage(FaseMapper.paraEntity(domain.getStage()))
+                .status(domain.getStatus())
+                .responsible(UsuarioMapper.paraEntity(domain.getResponsible()))
+                .createdBy(UsuarioMapper.paraEntity(domain.getCreatedBy()))
+                .dateCreated(domain.getDateCreated())
+                .closeDate(domain.getCloseDate())
+                .motivoPerda(domain.getMotivoPerda())
+                .segmento(domain.getSegmento())
+                .build();
+    }
+
+    public static NegocioDashBoardEntity paraEntityDashBoard(Negocio domain) {
+        return NegocioDashBoardEntity.builder()
                 .id(domain.getId())
                 .name(domain.getName())
                 .price(domain.getPrice())
