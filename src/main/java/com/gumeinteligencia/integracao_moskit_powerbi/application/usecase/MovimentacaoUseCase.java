@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -103,7 +104,7 @@ public class MovimentacaoUseCase {
         }
 
         List<Negocio> negociosFiltrados = todosNegocios.stream()
-                .filter(negocio -> negocio.getStatus() == StatusNegocio.OPEN
+                .filter(negocio -> this.validaDataFechamento(negocio)
                         && !negocio.getStage().getId().equals(codStageFiltro)
                 )
                 .toList();
@@ -131,6 +132,7 @@ public class MovimentacaoUseCase {
         return contAtualizacoes.get();
     }
 
+
     public Movimentacao salvar(Movimentacao novaMovimentacao) {
         log.info("Salvando movimentação. Movimentação: {}", novaMovimentacao);
 
@@ -140,6 +142,18 @@ public class MovimentacaoUseCase {
         log.info("Movimentação salva com sucesso. Movimentação: {}", movimentacaoSalva);
 
         return movimentacaoSalva;
+    }
+
+    private boolean validaDataFechamento(Negocio negocio) {
+
+        if(negocio.getStatus().toString().equals(StatusNegocio.OPEN.toString())) {
+            return true;
+        } else {
+            LocalDate dataFechamentoNegocio = negocio.getCloseDate();
+            LocalDate dataComparacao = LocalDate.now().minusDays(1);
+
+            return dataFechamentoNegocio.isAfter(dataComparacao);
+        }
     }
 
     private void salvaMovimentacoes(List<Movimentacao> movimentacoesCadastrar) {

@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum Segmento {
     EDUCACAO("Educação"),
-    INDUSTRIA("Indústria"),
+    INDUSTRI("Indústri"),
     TECNOLOGIA("Tecnologia"),
     VAREJO("Varejo"),
-    PRESTADORES_DE_SERVICO("Prestadores de serviço"),
+    PRESTADORES_DE_SERVICE("Prestadores de service"),
     AGENCIA_MARKETING("Agência de Marketing"),
     JOGOS("Jogos"),
     CLINICA_MEDICA("Clínica Médica"),
