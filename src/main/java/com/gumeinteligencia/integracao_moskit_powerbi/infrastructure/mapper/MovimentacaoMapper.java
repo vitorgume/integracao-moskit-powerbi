@@ -1,6 +1,7 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Movimentacao;
+import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoDashBoardEntity;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.MovimentacaoEntity;
 
 public class MovimentacaoMapper {
@@ -50,4 +51,24 @@ public class MovimentacaoMapper {
         }
     }
 
+    public static MovimentacaoDashBoardEntity paraEntityDashBoard(Movimentacao domain) {
+        if(domain.getFaseAntiga() == null) {
+            return MovimentacaoDashBoardEntity.builder()
+                    .id(domain.getId())
+                    .negocio(NegocioMapper.paraEntity(domain.getNegocio()))
+                    .dataCriacao(domain.getDataCriacao())
+                    .faseAtual(FaseMapper.paraEntity(domain.getFaseAtual()))
+                    .primeiraNavegacao(domain.getPrimeiraNavegacao())
+                    .build();
+        } else {
+            return MovimentacaoDashBoardEntity.builder()
+                    .id(domain.getId())
+                    .negocio(NegocioMapper.paraEntity(domain.getNegocio()))
+                    .dataCriacao(domain.getDataCriacao())
+                    .faseAntiga(FaseMapper.paraEntity(domain.getFaseAntiga()))
+                    .faseAtual(FaseMapper.paraEntity(domain.getFaseAtual()))
+                    .primeiraNavegacao(domain.getPrimeiraNavegacao())
+                    .build();
+        }
+    }
 }
