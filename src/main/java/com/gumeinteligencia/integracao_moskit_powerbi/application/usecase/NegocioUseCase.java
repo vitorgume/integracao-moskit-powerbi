@@ -13,18 +13,15 @@ import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class NegocioUseCase {
 
@@ -36,7 +33,33 @@ public class NegocioUseCase {
     private final UsuarioUseCase usuarioUseCase;
     private final NegocioMapper mapper;
     private final FunilMapper funilMapper;
+
+    @Value("${brightdash.stage.cod.runiao.marcada}")
+    private final Integer idStageReuniaoMarcada;
+
     private final AtomicInteger contAtualizacoes = new AtomicInteger();
+
+    public NegocioUseCase(
+            NegocioGateway gateway,
+            NegocioGatewayApi gatewayApi,
+            NegocioDashBoardGateway gatewayDashBoard,
+            FaseUseCase faseUseCase,
+            FunilUseCase funilUseCase,
+            UsuarioUseCase usuarioUseCase,
+            NegocioMapper mapper,
+            FunilMapper funilMapper,
+            @Value("${brightdash.stage.cod.runiao.marcada}") Integer idStageReuniaoMarcada
+    ){
+        this.gateway = gateway;
+        this.gatewayApi = gatewayApi;
+        this.gatewayDashBoard = gatewayDashBoard;
+        this.faseUseCase = faseUseCase;
+        this.funilUseCase = funilUseCase;
+        this.usuarioUseCase = usuarioUseCase;
+        this.mapper = mapper;
+        this.funilMapper = funilMapper;
+        this.idStageReuniaoMarcada = idStageReuniaoMarcada;
+    }
 
     public List<Negocio> listar() {
         log.info("Listando negócios...");
@@ -76,7 +99,7 @@ public class NegocioUseCase {
 
         cadastrarNovosNegocios(negociosApi, negociosBancoDados);
 
-        //Apenas no MVP esse trecho (79 - 85)
+        //Apenas no MVP esse trecho (80 - 86)
         negociosApi = gatewayApi.consultarTodosNegocis()
                 .stream()
                 .map(this::buscaDadosNecessarios)
@@ -112,6 +135,26 @@ public class NegocioUseCase {
         contAtualizacoes.getAndIncrement();
 
         return this.salvar(negocio);
+    }
+
+    public Negocio atualizaResponsavel(Negocio negocioAtualizado) {
+        log.info("Atualizando responsável pelo id. Id: {}", negocioAtualizado.getId());
+
+        if(negocioAtualizado.getStage().getId().equals(idStageReuniaoMarcada)) {
+            Negocio negocio = this.consultarPorId(negocioAtualizado.getId());
+            Usuario usuarioResponsavel = this.definirUsuario();
+        }
+
+
+    }
+
+    private Usuario definirUsuario() {
+        List<Usuario> usuarios = usuarioUseCase.listar();
+        Random random = new Random();
+
+        random.nextInt(1);
+
+        
     }
 
     //Apenas no MVP
