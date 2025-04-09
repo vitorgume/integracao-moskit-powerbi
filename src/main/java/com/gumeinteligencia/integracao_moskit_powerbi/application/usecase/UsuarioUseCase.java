@@ -84,4 +84,13 @@ public class UsuarioUseCase {
         return usuarioSalvo;
     }
 
+    public List<Usuario> listar() {
+        log.info("Listando usuários...");
+
+        List<Usuario> usuarios = gateway.listar();
+
+        log.info("Usuários listados com sucesso. Usuários: {}", usuarios);
+
+        return usuarios;
+    }
 }

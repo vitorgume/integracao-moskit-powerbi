@@ -140,21 +140,35 @@ public class NegocioUseCase {
     public Negocio atualizaResponsavel(Negocio negocioAtualizado) {
         log.info("Atualizando responsável pelo id. Id: {}", negocioAtualizado.getId());
 
+
         if(negocioAtualizado.getStage().getId().equals(idStageReuniaoMarcada)) {
             Negocio negocio = this.consultarPorId(negocioAtualizado.getId());
             Usuario usuarioResponsavel = this.definirUsuario();
+            negocio.setResponsible(usuarioResponsavel);
+            negocio = gateway.salvar(negocio);
+
+            log.info("Responsável atualizado com sucesso. Responsável: {}", usuarioResponsavel);
+            log.info("Negócio: {}", negocio);
+
+            return negocio;
         }
 
+        log.info("Negócio ainda não precisa atualizar responsável.");
 
+        return negocioAtualizado;
     }
 
     private Usuario definirUsuario() {
         List<Usuario> usuarios = usuarioUseCase.listar();
+        usuarios = usuarios.stream()
+                .filter(usuario -> usuario.getId().equals(134791)
+                                || usuario.getId().equals(120087))
+                .toList();
+
         Random random = new Random();
+        int usuarioPosi = random.nextInt(2);
 
-        random.nextInt(1);
-
-        
+        return usuarios.get(usuarioPosi);
     }
 
     //Apenas no MVP
