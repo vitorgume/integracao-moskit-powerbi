@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class NegocioUseCase {
 
     private final NegocioGateway gateway;
@@ -33,33 +34,8 @@ public class NegocioUseCase {
     private final UsuarioUseCase usuarioUseCase;
     private final NegocioMapper mapper;
     private final FunilMapper funilMapper;
-
-    @Value("${brightdash.stage.cod.runiao.marcada}")
-    private final Integer idStageReuniaoMarcada;
-
     private final AtomicInteger contAtualizacoes = new AtomicInteger();
 
-    public NegocioUseCase(
-            NegocioGateway gateway,
-            NegocioGatewayApi gatewayApi,
-            NegocioDashBoardGateway gatewayDashBoard,
-            FaseUseCase faseUseCase,
-            FunilUseCase funilUseCase,
-            UsuarioUseCase usuarioUseCase,
-            NegocioMapper mapper,
-            FunilMapper funilMapper,
-            @Value("${brightdash.stage.cod.runiao.marcada}") Integer idStageReuniaoMarcada
-    ){
-        this.gateway = gateway;
-        this.gatewayApi = gatewayApi;
-        this.gatewayDashBoard = gatewayDashBoard;
-        this.faseUseCase = faseUseCase;
-        this.funilUseCase = funilUseCase;
-        this.usuarioUseCase = usuarioUseCase;
-        this.mapper = mapper;
-        this.funilMapper = funilMapper;
-        this.idStageReuniaoMarcada = idStageReuniaoMarcada;
-    }
 
     public List<Negocio> listar() {
         log.info("Listando negócios...");
@@ -135,40 +111,6 @@ public class NegocioUseCase {
         contAtualizacoes.getAndIncrement();
 
         return this.salvar(negocio);
-    }
-
-    public Negocio atualizaResponsavel(Negocio negocioAtualizado) {
-        log.info("Atualizando responsável pelo id. Id: {}", negocioAtualizado.getId());
-
-
-        if(negocioAtualizado.getStage().getId().equals(idStageReuniaoMarcada)) {
-            Negocio negocio = this.consultarPorId(negocioAtualizado.getId());
-            Usuario usuarioResponsavel = this.definirUsuario();
-            negocio.setResponsible(usuarioResponsavel);
-            negocio = gateway.salvar(negocio);
-
-            log.info("Responsável atualizado com sucesso. Responsável: {}", usuarioResponsavel);
-            log.info("Negócio: {}", negocio);
-
-            return negocio;
-        }
-
-        log.info("Negócio ainda não precisa atualizar responsável.");
-
-        return negocioAtualizado;
-    }
-
-    private Usuario definirUsuario() {
-        List<Usuario> usuarios = usuarioUseCase.listar();
-        usuarios = usuarios.stream()
-                .filter(usuario -> usuario.getId().equals(134791)
-                                || usuario.getId().equals(120087))
-                .toList();
-
-        Random random = new Random();
-        int usuarioPosi = random.nextInt(2);
-
-        return usuarios.get(usuarioPosi);
     }
 
     //Apenas no MVP

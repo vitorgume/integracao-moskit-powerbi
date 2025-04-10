@@ -25,10 +25,4 @@ public class NegocioController {
         return ResponseEntity.ok(mapper.paraDto(negocioAtualizado));
     }
 
-    @PostMapping("/responsavel")
-    public ResponseEntity<NegocioDto> atualizaResponsavel(@RequestBody NegocioDto novoNegocio) {
-        Negocio negocioAtualizado = useCase.atualizaResponsavel(mapper.paraDomain(novoNegocio));
-        return ResponseEntity.ok(mapper.paraDto(negocioAtualizado));
-    }
-
 }
