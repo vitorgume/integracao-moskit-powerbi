@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -24,6 +25,7 @@ public class Negocio {
     private LocalDate closeDate;
     private String motivoPerda;
     private Segmento segmento;
+    private List<Produto> dealProducts;
 
     public void atualizaDados(Negocio novosDados) {
         this.name = novosDados.getName();

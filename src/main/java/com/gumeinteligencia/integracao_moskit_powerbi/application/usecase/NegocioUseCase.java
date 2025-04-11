@@ -4,10 +4,10 @@ import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.Neg
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.NegocioGatewayApi;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioDashBoardGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioGateway;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Fase;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Funil;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.ProdutoDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.ProdutoMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.ProdutoNegocioMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.domain.*;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FunilMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.NegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
@@ -32,8 +32,11 @@ public class NegocioUseCase {
     private final FaseUseCase faseUseCase;
     private final FunilUseCase funilUseCase;
     private final UsuarioUseCase usuarioUseCase;
+    private final ProdutoUseCase produtoUseCase;
     private final NegocioMapper mapper;
     private final FunilMapper funilMapper;
+    private final ProdutoMapper produtoMapper;
+    private final ProdutoNegocioMapper produtoNegocioMapper;
     private final AtomicInteger contAtualizacoes = new AtomicInteger();
 
 
@@ -170,6 +173,26 @@ public class NegocioUseCase {
         Fase fase = faseUseCase.consultarPorId(negocio.getStage().getId());
         Funil funilStage = funilUseCase.consultarPorId(fase.getPipeline().getId());
         negocio.getStage().setPipeline(funilMapper.paraDto(funilStage));
+
+        if(negocio.getDealProducts().isEmpty()) {
+            negocio.setDealProducts(List.of());
+        } else {
+            List<ProdutoDto> produtosDto = produtoNegocioMapper.paraDomain(negocio.getDealProducts()).stream()
+                    .map(produtoMapper::paraDto)
+                    .toList();
+
+            List<ProdutoDto> produtos = produtosDto.stream()
+                    .map(produto -> produtoUseCase.consultarPorId(produto.getId()))
+                    .map(produtoMapper::paraDto)
+                    .toList();
+
+            List<Produto> produtosDomain = produtos.stream()
+                            .map(produtoMapper::paraDomain)
+                            .toList();
+
+            negocio.setDealProducts(produtoNegocioMapper.paraDto(produtosDomain));
+        }
+
         return negocio;
     }
 }

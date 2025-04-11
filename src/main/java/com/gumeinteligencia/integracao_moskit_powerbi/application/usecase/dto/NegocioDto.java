@@ -23,4 +23,5 @@ public class NegocioDto {
     private String dateCreated;
     private String closeDate;
     private List<CampoPersonalizadoDto> entityCustomFields;
+    private List<ProdutoNegocioDto> dealProducts;
 }

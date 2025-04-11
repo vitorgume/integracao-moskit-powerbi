@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity(name = "Negocio")
 @Table(name = "negocios")
@@ -51,4 +52,12 @@ public class NegocioEntity {
 
     @Enumerated(EnumType.STRING)
     private Segmento segmento;
+
+    @ManyToMany
+    @JoinTable(
+            name = "produtos_negocio",
+            joinColumns = @JoinColumn(name = "id_negocio", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "id_produto", nullable = false)
+    )
+    private List<ProdutoEntity> dealProducts;
 }

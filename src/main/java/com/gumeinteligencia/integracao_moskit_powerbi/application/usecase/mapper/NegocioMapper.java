@@ -20,6 +20,7 @@ public class NegocioMapper {
     private final FaseMapper faseMapper;
     private final UsuarioMapper usuarioMapper;
     private final MapperEnum mapperEnum;
+    private final ProdutoNegocioMapper produtoNegocioMapper;
 
     public Negocio paraDomain(NegocioDto dto) {
         return Negocio.builder()
@@ -34,6 +35,7 @@ public class NegocioMapper {
                 .closeDate(MapperData.trasnformaData(dto.getCloseDate()))
                 .motivoPerda(this.mapperMotivoPerda(dto))
                 .segmento(mapperEnum.organizaSegmento(dto))
+                .dealProducts(produtoNegocioMapper.paraDomain(dto.getDealProducts()))
                 .build();
     }
 
@@ -48,6 +50,7 @@ public class NegocioMapper {
                     .responsible(usuarioMapper.paraDto(domain.getResponsible()))
                     .createdBy(usuarioMapper.paraDto(domain.getCreatedBy()))
                     .dateCreated(MapperData.trasformaDataString(domain.getDateCreated()))
+                    .dealProducts(produtoNegocioMapper.paraDto(domain.getDealProducts()))
                     .build();
         } else {
             return NegocioDto.builder()
@@ -60,6 +63,7 @@ public class NegocioMapper {
                     .createdBy(usuarioMapper.paraDto(domain.getCreatedBy()))
                     .dateCreated(MapperData.trasformaDataString(domain.getDateCreated()))
                     .closeDate(MapperData.trasformaDataString(domain.getCloseDate()))
+                    .dealProducts(produtoNegocioMapper.paraDto(domain.getDealProducts()))
                     .build();
         }
     }
