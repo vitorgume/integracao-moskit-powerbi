@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -17,6 +18,11 @@ public class ProdutoNegocioMapper {
     private final ProdutoUseCase produtoUseCase;
 
     public List<Produto> paraDomain(List<ProdutoNegocioDto> produtoNegocioDtos) {
+
+        if(produtoNegocioDtos == null) {
+            return new ArrayList<>();
+        }
+
         return produtoNegocioDtos.stream()
                 .map(produtoNegocio ->
                         produtoUseCase.consultarPorId(produtoNegocio.getProduct().getId()))

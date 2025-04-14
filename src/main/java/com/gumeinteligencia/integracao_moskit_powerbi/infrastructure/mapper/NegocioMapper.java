@@ -19,6 +19,7 @@ public class NegocioMapper {
                 .closeDate(entity.getCloseDate())
                 .motivoPerda(entity.getMotivoPerda())
                 .segmento(entity.getSegmento())
+                .dealProducts(entity.getDealProducts().stream().map(ProdutoMapper::paraDomain).toList())
                 .build();
     }
 
@@ -35,6 +36,7 @@ public class NegocioMapper {
                 .closeDate(domain.getCloseDate())
                 .motivoPerda(domain.getMotivoPerda())
                 .segmento(domain.getSegmento())
+                .dealProducts(domain.getDealProducts().stream().map(ProdutoMapper::paraEntity).toList())
                 .build();
     }
 

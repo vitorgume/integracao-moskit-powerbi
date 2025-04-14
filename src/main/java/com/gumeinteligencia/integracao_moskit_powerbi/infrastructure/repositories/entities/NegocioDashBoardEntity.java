@@ -51,12 +51,4 @@ public class NegocioDashBoardEntity {
 
     @Enumerated(EnumType.STRING)
     private Segmento segmento;
-
-    @ManyToMany
-    @JoinTable(
-            name = "produtos_negocio",
-            joinColumns = @JoinColumn(name = "id_negocio", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "id_produto", nullable = false)
-    )
-    private List<ProdutoEntity> dealProducts;
 }

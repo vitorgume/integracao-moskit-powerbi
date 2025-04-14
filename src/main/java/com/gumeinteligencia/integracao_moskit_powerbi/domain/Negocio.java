@@ -36,5 +36,6 @@ public class Negocio {
         this.motivoPerda = novosDados.getMotivoPerda();
         this.segmento = novosDados.getSegmento();
         this.responsible = novosDados.getResponsible();
+        this.dealProducts = novosDados.getDealProducts();
     }
 }

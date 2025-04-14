@@ -16,6 +16,6 @@ public class SegmentoProperties {
     private Map<String, Integer> cod;
 
     public Integer getCodigo(String key) {
-        return cod.getOrDefault(key, 0);
+        return cod.getOrDefault(key.toLowerCase(), 0);
     }
 }

@@ -23,8 +23,9 @@ public enum Segmento {
 
     public static void carregarCodigos(SegmentoProperties properties) {
         for (Segmento segmento : values()) {
-            segmento.codigo = properties.getCodigo(segmento.descricao);
-            segmento.descricao = formatarDescricao(segmento.descricao);
+            String chave = segmento.name().toLowerCase(); // igual às chaves do .properties
+            segmento.codigo = properties.getCodigo(chave);
+            segmento.descricao = formatarDescricao(chave);
         }
     }
 
