@@ -16,18 +16,17 @@ public class AtualizaUseCase {
     private final ProdutoUseCase produtoUseCase;
 
     public String gatewayAtualizacoes() {
-//        int quantidadeExecucoesUsuario = usuarioUseCase.atualiza();
-//        int quantidadeExecucoesFunil = funilUseCase.atualiza();
-//        int quantidadeExecucoesFase = faseUseCase.atualiza();
-//        int quantidadeExecucoesEmpresa = empresaUseCase.atualiza();
-//        int quantidadeExecucoesProduto = produtoUseCase.atualiza();
+        int quantidadeExecucoesUsuario = usuarioUseCase.atualiza();
+        int quantidadeExecucoesFunil = funilUseCase.atualiza();
+        int quantidadeExecucoesFase = faseUseCase.atualiza();
+        int quantidadeExecucoesEmpresa = empresaUseCase.atualiza();
+        int quantidadeExecucoesProduto = produtoUseCase.atualiza();
         int quantidadeExecucoesNegocio = negocioUseCase.atualiza();
-//        int quantidadeExecucoesMovimentacoesNegocios = movitacoesUseCase.atualiza();
+        int quantidadeExecucoesMovimentacoesNegocios = movitacoesUseCase.atualiza();
 
-//        int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase
-//                + quantidadeExecucoesEmpresa + quantidadeExecucoesNegocio + quantidadeExecucoesMovimentacoesNegocios
-//                + quantidadeExecucoesProduto;
-        int total = quantidadeExecucoesNegocio;
+        int total = quantidadeExecucoesUsuario + quantidadeExecucoesFunil + quantidadeExecucoesFase
+                + quantidadeExecucoesEmpresa + quantidadeExecucoesNegocio + quantidadeExecucoesMovimentacoesNegocios
+                + quantidadeExecucoesProduto;
 
         return "Atualização concluida com sucesso, quantidade de operações: " + total;
     }
