@@ -86,49 +86,6 @@ public class NegocioApiDataProvider implements NegocioGatewayApi {
     }
 
     @Override
-    public List<NegocioDto> consultarTodosNegocis() {
-        log.info("Consultando todos negócios na api...");
-        String uri = baseUrl + "/deals/search";
-        String nextPageToken = null;
-        int quantity = 50;
-        List<NegocioDto> todosNegocios = new ArrayList<>();
-
-        List<Map<String, Object>> requestBody = List.of(
-                Map.of(
-                        "field", "stage",
-                        "expression", "none_of",
-                        "values", List.of(codFaseFiltro)
-                )
-        );
-
-        do {
-            String uriPaginada = nextPageToken == null
-                    ? uri + "?quantity=" + quantity
-                    : uri + "?quantity=" + quantity + "&nextPageToken=" + nextPageToken;
-
-            var response = webClient.post()
-                    .uri(uriPaginada)
-                    .header("apikey", apiKey)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(requestBody)
-                    .retrieve()
-                    .toEntityList(NegocioDto.class)
-                    .block();
-
-
-
-            if (response != null && response.getBody() != null) {
-                todosNegocios.addAll(response.getBody());
-            }
-
-            nextPageToken = response != null ? response.getHeaders().getFirst("X-Moskit-Listing-Next-Page-Token") : null;
-        } while (nextPageToken != null && !nextPageToken.isEmpty());
-
-        log.info("Finalizado consultas de todos negócios na api...");
-        return todosNegocios;
-    }
-
-    @Override
     public NegocioDto consultarPorId(Integer id) {
         log.info("Consultando negócio por id na api...");
         String uri = baseUrl + "/deals/" + id;

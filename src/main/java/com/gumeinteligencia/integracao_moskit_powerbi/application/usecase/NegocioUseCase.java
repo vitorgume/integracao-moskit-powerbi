@@ -4,22 +4,20 @@ import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.Neg
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.NegocioGatewayApi;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioDashBoardGateway;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.NegocioGateway;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.ProdutoDto;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FunilMapper;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.NegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.ProdutoMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.ProdutoNegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.*;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.FunilMapper;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.NegocioMapper;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -78,16 +76,6 @@ public class NegocioUseCase {
 
         cadastrarNovosNegocios(negociosApi, negociosBancoDados);
 
-        //Apenas no MVP esse trecho (80 - 86)
-        negociosApi = gatewayApi.consultarTodosNegocis()
-                .stream()
-                .map(this::buscaDadosNecessarios)
-                .map(mapper::paraDomain)
-                .toList();
-
-        atualizaNegocioLocal(negociosApi, negociosBancoDados);
-
-
         log.info("Quantidade de operações: " + contAtualizacoes.get());
         return contAtualizacoes.get();
     }
@@ -114,33 +102,6 @@ public class NegocioUseCase {
         contAtualizacoes.getAndIncrement();
 
         return this.salvar(negocio);
-    }
-
-    //Apenas no MVP
-    private void atualizaNegocioLocal(List<Negocio> negociosApi, List<Negocio> negociosBancoDados) {
-        log.info("Atualizando negócios ja existenes...");
-
-        Map<Integer, Negocio> negocioBancoMap = negociosBancoDados.stream()
-                .collect(Collectors.toMap(Negocio::getId, Function.identity()));
-
-        List<Negocio> negociosAtualizar = negociosApi.stream()
-                .filter(negocioApi -> {
-                    Negocio negocioBd = negocioBancoMap.get(negocioApi.getId());
-                    return negocioBd != null
-                            && !negocioApi.equals(negocioBd);
-                })
-                .toList();
-
-        negociosAtualizar.forEach(negocioApi -> {
-            Negocio negocioBd = negocioBancoMap.get(negocioApi.getId());
-            if (negocioBd != null) {
-                negocioBd.atualizaDados(negocioApi);
-                this.salvar(negocioBd);
-                contAtualizacoes.getAndIncrement();
-            }
-        });
-
-        log.info("Atualização de negócios ja existentes finalizada.");
     }
 
 

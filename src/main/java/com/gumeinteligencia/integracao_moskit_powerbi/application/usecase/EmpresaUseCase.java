@@ -1,12 +1,11 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.EmpresaNaoEncontradaException;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.exceptions.NenhumaEmpresaEncontradaException;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.api.EmpresaGatewayApi;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.gateways.bd.EmpresaGateway;
+import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.EmpresaMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Empresa;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper.EmpresaMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

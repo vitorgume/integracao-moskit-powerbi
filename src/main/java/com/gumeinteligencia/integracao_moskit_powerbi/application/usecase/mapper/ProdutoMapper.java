@@ -2,7 +2,6 @@ package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mappe
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.ProdutoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Produto;
-import com.gumeinteligencia.integracao_moskit_powerbi.domain.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

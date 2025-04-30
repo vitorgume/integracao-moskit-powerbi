@@ -1,16 +1,11 @@
 package com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.mapper;
 
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.MotivoPerdaUseCase;
-import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.CampoPersonalizadoDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.MotivoPerdaDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.application.usecase.dto.NegocioDto;
 import com.gumeinteligencia.integracao_moskit_powerbi.domain.Negocio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import javax.swing.text.html.Option;
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component

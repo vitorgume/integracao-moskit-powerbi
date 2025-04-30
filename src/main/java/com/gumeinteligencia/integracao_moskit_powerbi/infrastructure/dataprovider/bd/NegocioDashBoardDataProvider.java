@@ -6,7 +6,6 @@ import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.dataprovide
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.mapper.NegocioMapper;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.NegocioDashBoardRepository;
 import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.NegocioDashBoardEntity;
-import com.gumeinteligencia.integracao_moskit_powerbi.infrastructure.repositories.entities.NegocioEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
